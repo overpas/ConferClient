@@ -3,6 +3,8 @@
           xmlns:tools="http://schemas.android.com/tools"
           package="by.overpass.conferclient">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
             android:name=".ConferApp"
             android:icon="@mipmap/ic_launcher"

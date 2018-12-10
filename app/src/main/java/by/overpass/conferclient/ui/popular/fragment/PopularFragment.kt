@@ -1,14 +1,19 @@
 package by.overpass.conferclient.ui.popular.fragment
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.*
 import by.overpass.conferclient.R
 import by.overpass.conferclient.util.shortToast
-import kotlinx.android.synthetic.main.fragment_latest.*
+import by.overpass.conferclient.viewmodel.PopularViewModel
+import kotlinx.android.synthetic.main.fragment_popular.*
+import timber.log.Timber
 
 class PopularFragment : Fragment() {
 
     private var param1: String? = null
+    private lateinit var viewModel: PopularViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,6 +32,13 @@ class PopularFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel = ViewModelProviders.of(this).get(PopularViewModel::class.java)
+        viewModel.getPopular().observe(this, Observer{
+            it?.run {
+                Timber.d(this.toString())
+                tvStub.text = this.toString()
+            }
+        })
         if (param1 != null) {
             tvStub.text = "$param1"
         }
