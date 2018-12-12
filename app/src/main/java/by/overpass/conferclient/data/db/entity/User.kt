@@ -7,16 +7,20 @@ import android.arch.persistence.room.Relation
 
 @Entity
 data class User(
-    @ColumnInfo(name = "email")
-    var email: String?,
-    @ColumnInfo(name = "fullName")
-    var fullName: String?,
     @PrimaryKey
-    @ColumnInfo(name = "id")
+    @ColumnInfo(name = COLUMNS.ID)
     var id: Long,
-    @ColumnInfo(name = "passwordHash")
-    var passwordHash: String?,
-    var posts: List<Post>?,
-    @ColumnInfo(name = "username")
+    @ColumnInfo(name = COLUMNS.EMAIL)
+    var email: String?,
+    @ColumnInfo(name = COLUMNS.FULL_NAME)
+    var fullName: String?,
+    @ColumnInfo(name = COLUMNS.USERNAME)
     var username: String?
-)
+) {
+    object COLUMNS {
+        const val ID = "user_id"
+        const val EMAIL = "email"
+        const val FULL_NAME = "fullName"
+        const val USERNAME = "username"
+    }
+}

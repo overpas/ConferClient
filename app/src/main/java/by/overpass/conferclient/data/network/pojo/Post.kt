@@ -4,15 +4,15 @@ import com.google.gson.annotations.SerializedName
 
 data class Post(
     @SerializedName("author")
-    var author: Author?,
+    var author: Author,
     @SerializedName("body")
     var body: String?,
     @SerializedName("date")
-    var date: Long?,
+    var date: Long,
     @SerializedName("id")
-    var id: Int,
+    var id: Long,
     @SerializedName("inReplyTo")
-    var inReplyTo: Any?,
+    var inReplyTo: Long?,
     @SerializedName("title")
     var title: String?
 )

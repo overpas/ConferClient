@@ -8,11 +8,11 @@ data class Author(
     @SerializedName("fullName")
     var fullName: String?,
     @SerializedName("id")
-    var id: Int,
+    var id: Long,
     @SerializedName("passwordHash")
-    var passwordHash: Any?,
+    var passwordHash: String?,
     @SerializedName("posts")
-    var posts: Any?,
+    var posts: Post?,
     @SerializedName("roles")
     var roles: List<Role?>?,
     @SerializedName("username")

@@ -1,4 +1,5 @@
 package by.overpass.conferclient.ui.popular.fragment
+
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
@@ -32,11 +33,17 @@ class PopularFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(PopularViewModel::class.java)
-        viewModel.getPopular().observe(this, Observer{
+        viewModel = ViewModelProviders.of(this, PopularViewModel.Factory(context!!))
+            .get(PopularViewModel::class.java)
+        /*viewModel.getPopularNoCache().observe(this, Observer {
             it?.run {
                 Timber.d(this.toString())
                 tvStub.text = this.toString()
+            }
+        })*/
+        viewModel.getPopular().observe(this, Observer {
+            it?.run {
+                Timber.d(this.toString())
             }
         })
         if (param1 != null) {
