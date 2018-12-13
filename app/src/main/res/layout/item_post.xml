@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.circularreveal.cardview.CircularRevealCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="@dimen/corner_radius"
+    app:cardElevation="@dimen/corner_radius">
+
+    <com.chauthai.swipereveallayout.SwipeRevealLayout
+        android:id="@+id/swipeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:dragEdge="left"
+        app:mode="same_level">
+
+        <!-- Your secondary layout here -->
+        <FrameLayout
+            android:id="@+id/flHiddenButtons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:background="#0000ff" />
+
+        </FrameLayout>
+
+        <!-- Your main layout here -->
+        <FrameLayout
+            android:id="@+id/flPost"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:background="#ff0000" />
+
+        </FrameLayout>
+
+    </com.chauthai.swipereveallayout.SwipeRevealLayout>
+
+</android.support.design.circularreveal.cardview.CircularRevealCardView>

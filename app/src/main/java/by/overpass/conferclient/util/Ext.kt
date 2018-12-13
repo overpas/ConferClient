@@ -12,8 +12,8 @@ import by.overpass.conferclient.ConferApp
 fun AppCompatActivity.replaceFragment(fragment: Fragment, @IdRes resId: Int, addToBackStack: Boolean) {
     supportFragmentManager.transact {
         replace(resId, fragment)
-            .takeIf { addToBackStack }
-            ?.addToBackStack(null)
+                .takeIf { addToBackStack }
+                ?.addToBackStack(null)
     }
 }
 

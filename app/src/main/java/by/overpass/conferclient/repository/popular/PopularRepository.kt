@@ -1,14 +1,14 @@
-package by.overpass.conferclient.repository
+package by.overpass.conferclient.repository.popular
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.content.Context
 import by.overpass.conferclient.data.db.ConferDatabase
 import by.overpass.conferclient.data.db.entity.User
-import by.overpass.conferclient.data.dto.PostWithUserAndPopularity
+import by.overpass.conferclient.data.dto.PostWithUser
+import by.overpass.conferclient.data.network.CLIENT
 import by.overpass.conferclient.data.network.api.ConferApi
 import by.overpass.conferclient.data.network.pojo.Post
-import by.overpass.conferclient.data.network.CLIENT
 import by.overpass.conferclient.util.runInBackground
 import retrofit2.Call
 import retrofit2.Callback
@@ -29,7 +29,6 @@ class PopularRepository(context: Context) {
         val popularPosts = MutableLiveData<List<Post>>()
         conferApi.getPopular(limit).enqueue(object : Callback<List<Post>> {
             override fun onFailure(call: Call<List<Post>>, t: Throwable) {
-                // TODO: Repeat if timeout (it probably means that the web app is sleeping)
                 if (t is SocketTimeoutException && !retried) {
                     getPopularNoCache(limit, true)
                 }
@@ -46,10 +45,9 @@ class PopularRepository(context: Context) {
         return popularPosts
     }
 
-    fun getPopular(limit: Int = DEFAULT_LIMIT, retried: Boolean = false): LiveData<List<PostWithUserAndPopularity>> {
+    fun getPopular(limit: Int = DEFAULT_LIMIT, retried: Boolean = false): LiveData<List<PostWithUser>> {
         conferApi.getPopular(limit).enqueue(object : Callback<List<Post>> {
             override fun onFailure(call: Call<List<Post>>, t: Throwable) {
-                // TODO: Repeat if timeout (it probably means that the web app is sleeping)
                 if (t is SocketTimeoutException && !retried) {
                     getPopular(limit, true)
                 }

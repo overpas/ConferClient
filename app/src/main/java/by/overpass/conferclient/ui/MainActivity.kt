@@ -50,18 +50,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_latest -> {
-                replaceFragment(
-                    LatestFragment.newInstance("Latest"),
-                    R.id.flMainFragmentContainer,
-                    false
-                )
+                replaceFragment(LatestFragment.newInstance(), R.id.flMainFragmentContainer, false)
             }
             R.id.action_popular -> {
-                replaceFragment(
-                    PopularFragment.newInstance("Popular"),
-                    R.id.flMainFragmentContainer,
-                    false
-                )
+                replaceFragment(PopularFragment.newInstance(), R.id.flMainFragmentContainer, false)
             }
             R.id.action_about -> {
 
