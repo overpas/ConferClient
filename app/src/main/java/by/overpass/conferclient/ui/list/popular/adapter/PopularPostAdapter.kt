@@ -1,4 +1,4 @@
-package by.overpass.conferclient.ui.popular.adapter
+package by.overpass.conferclient.ui.list.popular.adapter
 
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
@@ -36,11 +36,11 @@ class PopularPostAdapter : RecyclerView.Adapter<PopularPostAdapter.ViewHolder>()
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         internal fun setPost(post: PostWithUser) {
-            itemView.tvBody.text = post.post.body ?: ""
-            itemView.tvFullName.text = post.user.fullName ?: ""
-            itemView.tvTitle.text = post.post.title ?: ""
-            itemView.tvUsername.text = "(${post.user.username ?: ""})"
-            itemView.tvDate.text = formatPostDate(post.post.date)
+            itemView.tvBody.text = post.getBody() ?: ""
+            itemView.tvFullName.text = post.getFullName() ?: ""
+            itemView.tvTitle.text = post.getTitle() ?: ""
+            itemView.tvUsername.text = "(${post.getUsername() ?: ""})"
+            itemView.tvDate.text = formatPostDate(post.getDate())
         }
 
     }

@@ -1,4 +1,4 @@
-package by.overpass.conferclient.ui.popular.adapter
+package by.overpass.conferclient.ui.list.popular.adapter
 
 import android.support.v7.util.DiffUtil
 import by.overpass.conferclient.data.dto.PostWithUser

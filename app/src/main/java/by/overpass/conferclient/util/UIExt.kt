@@ -17,6 +17,14 @@ fun AppCompatActivity.replaceFragment(fragment: Fragment, @IdRes resId: Int, add
     }
 }
 
+fun Fragment.replaceFragment(fragment: Fragment, @IdRes resId: Int, addToBackStack: Boolean) {
+    childFragmentManager.transact {
+        replace(resId, fragment)
+                .takeIf { addToBackStack }
+                ?.addToBackStack(null)
+    }
+}
+
 inline fun FragmentManager.transact(transactionFunction: FragmentTransaction.() -> Unit) {
     val transaction = beginTransaction()
     transaction.transactionFunction()

@@ -1,4 +1,4 @@
-package by.overpass.conferclient.ui.latest.fragment
+package by.overpass.conferclient.ui.list.latest.fragment
 
 
 import android.view.MenuItem
@@ -9,6 +9,8 @@ import by.overpass.conferclient.util.shortToast
 class LatestFragment : PostListFragment() {
 
     override fun getLayoutRes(): Int = R.layout.fragment_latest
+
+    override fun getActionBarTitleRes(): Int = R.string.latest
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
