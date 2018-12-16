@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.support.annotation.CallSuper
 import android.support.annotation.LayoutRes
 import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentActivity
 import android.view.*
 import by.overpass.conferclient.R
 
@@ -20,11 +21,16 @@ abstract class PostListFragment : Fragment() {
 
     @CallSuper
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(getLayoutRes(), container, false)
     }
+
+    /**
+     * Should be used to set necessary observers
+     */
+    protected open fun onViewModelReady() {}
 
     @CallSuper
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

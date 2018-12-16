@@ -1,14 +1,14 @@
 package by.overpass.conferclient.viewmodel.latest
 
 import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelProvider
 import android.content.Context
+import by.overpass.conferclient.viewmodel.BaseFactory
 
 class LatestViewModel(context: Context) : ViewModel() {
 
     // TODO: Implement
 
-    class Factory(private val context: Context) : ViewModelProvider.NewInstanceFactory() {
+    class Factory(context: Context) : BaseFactory(context) {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return LatestViewModel(context) as T
         }

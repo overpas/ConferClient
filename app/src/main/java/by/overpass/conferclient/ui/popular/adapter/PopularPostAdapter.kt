@@ -7,38 +7,40 @@ import android.view.View
 import android.view.ViewGroup
 import by.overpass.conferclient.R
 import by.overpass.conferclient.data.dto.PostWithUser
-import com.chauthai.swipereveallayout.ViewBinderHelper
+import by.overpass.conferclient.util.formatPostDate
+import kotlinx.android.synthetic.main.item_post.view.*
 
 
 class PopularPostAdapter : RecyclerView.Adapter<PopularPostAdapter.ViewHolder>() {
 
-    private val viewBinderHelper = ViewBinderHelper()
-
     var posts: List<PostWithUser> = listOf()
         set(value) {
+            val diffResult = DiffUtil.calculateDiff(PostDiff(field, value))
             field = value
-            val postDiff = PostDiff(field, value)
-            val diffResult = DiffUtil.calculateDiff(postDiff)
             diffResult.dispatchUpdatesTo(this)
         }
 
     override fun onCreateViewHolder(parent: ViewGroup, p1: Int): ViewHolder {
-        return ViewHolder(
-                LayoutInflater.from(parent.context).inflate(R.layout.ite_pos, parent, false)
-        )
+        return LayoutInflater.from(parent.context)
+                .run { inflate(R.layout.item_post, parent, false) }
+                .run { ViewHolder(this) }
     }
 
     override fun getItemCount(): Int = posts.size
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-        //viewBinderHelper.bind(viewHolder.itemView.swipeLayout, posts[position].post.id.toString())
+        viewHolder.setPost(posts[position])
     }
 
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-        private fun setPost(post: PostWithUser) {
-
+        internal fun setPost(post: PostWithUser) {
+            itemView.tvBody.text = post.post.body ?: ""
+            itemView.tvFullName.text = post.user.fullName ?: ""
+            itemView.tvTitle.text = post.post.title ?: ""
+            itemView.tvUsername.text = "(${post.user.username ?: ""})"
+            itemView.tvDate.text = formatPostDate(post.post.date)
         }
 
     }

@@ -1,44 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.circularreveal.cardview.CircularRevealCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="@dimen/margin_s"
     app:cardCornerRadius="@dimen/corner_radius"
-    app:cardElevation="@dimen/corner_radius">
+    app:cardElevation="@dimen/card_elevation">
 
-    <com.chauthai.swipereveallayout.SwipeRevealLayout
-        android:id="@+id/swipeLayout"
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:dragEdge="left"
-        app:mode="same_level">
+        android:layout_height="wrap_content">
 
-        <!-- Your secondary layout here -->
-        <FrameLayout
-            android:id="@+id/flHiddenButtons"
+        <TextView
+            android:id="@+id/tvTitle"
+            style="@style/PostTitle"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_s"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="@tools:sample/lorem" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:background="#0000ff" />
+        <TextView
+            android:id="@+id/tvDate"
+            style="@style/PostTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@id/tvBody"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="@tools:sample/date/hhmm" />
 
-        </FrameLayout>
-
-        <!-- Your main layout here -->
-        <FrameLayout
-            android:id="@+id/flPost"
+        <TextView
+            android:id="@+id/tvBody"
+            style="@style/PostPlainText"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/tvTitle"
+            tools:text="@tools:sample/lorem/random" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:background="#ff0000" />
+        <TextView
+            android:id="@+id/tvFullName"
+            style="@style/PostHigherEmphasis"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvBody"
+            tools:text="@tools:sample/full_names" />
 
-        </FrameLayout>
+        <TextView
+            android:id="@+id/tvUsername"
+            style="@style/PostUsername"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/ivSwitchFullShort"
+            app:layout_constraintStart_toEndOf="@id/tvFullName"
+            app:layout_constraintTop_toBottomOf="@id/tvBody"
+            tools:text="(observer)" />
 
-    </com.chauthai.swipereveallayout.SwipeRevealLayout>
+        <ImageView
+            android:id="@+id/ivSwitchFullShort"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin_s"
+            android:contentDescription="@string/expand"
+            android:src="@drawable/ic_down"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvBody" />
+
+    </android.support.constraint.ConstraintLayout>
 
 </android.support.design.circularreveal.cardview.CircularRevealCardView>

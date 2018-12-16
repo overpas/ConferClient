@@ -6,6 +6,7 @@ import android.content.Context
 import by.overpass.conferclient.data.db.ConferDatabase
 import by.overpass.conferclient.data.db.entity.User
 import by.overpass.conferclient.data.dto.PostWithUser
+import by.overpass.conferclient.data.mapper.Mapper
 import by.overpass.conferclient.data.network.CLIENT
 import by.overpass.conferclient.data.network.api.ConferApi
 import by.overpass.conferclient.data.network.pojo.Post
@@ -22,6 +23,7 @@ private const val DEFAULT_LIMIT = 10
 class PopularRepository(context: Context) {
 
     private val conferApi = CLIENT.create(ConferApi::class.java)
+    private val mapper = Mapper()
     private val postDao = ConferDatabase.getInstance(context).getPostDao()
     private val userDao = ConferDatabase.getInstance(context).getUserDao()
 
@@ -57,14 +59,8 @@ class PopularRepository(context: Context) {
             override fun onResponse(call: Call<List<Post>>, response: Response<List<Post>>) {
                 if (response.isSuccessful && response.body() != null) {
                     val parsedPosts: List<Post> = response.body()!!
-                    val dbPosts = parsedPosts.map {
-                        by.overpass.conferclient.data.db.entity.Post(
-                            it.id, it.author.id, it.body, Date(it.date), it.inReplyTo, it.title
-                        )
-                    }
-                    val dbUsers = parsedPosts.map {
-                        User(it.author.id, it.author.email, it.author.fullName, it.author.username)
-                    }
+                    val dbPosts = mapper.mapPosts(parsedPosts)
+                    val dbUsers = mapper.mapUsers(parsedPosts)
                     runInBackground {
                         userDao.insert(dbUsers)
                         postDao.insert(dbPosts)
