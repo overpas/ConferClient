@@ -4,19 +4,24 @@ import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
-import android.support.v7.app.AlertDialog
-import android.support.v7.app.AppCompatActivity
-import android.view.LayoutInflater
 import android.view.MenuItem
+import android.view.View
+import android.widget.Button
+import android.widget.TextView
 import by.overpass.conferclient.R
-import by.overpass.conferclient.ui.list.latest.fragment.LatestFragment
-import by.overpass.conferclient.ui.list.popular.fragment.PopularFragment
+import by.overpass.conferclient.ui.base.activity.BaseActivity
+import by.overpass.conferclient.ui.list.fragment.create.NewPostDialogFragment
+import by.overpass.conferclient.ui.list.fragment.latest.LatestFragment
+import by.overpass.conferclient.ui.list.fragment.popular.PopularFragment
+import by.overpass.conferclient.util.Preferences
 import by.overpass.conferclient.util.replaceFragment
-import by.overpass.conferclient.util.shortToast
-import kotlinx.android.synthetic.main.app_bar_list.*
 import kotlinx.android.synthetic.main.activity_list.*
+import kotlinx.android.synthetic.main.app_bar_list.*
 
-class ListActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class ListActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
+
+    private lateinit var tvUserName: TextView
+    private lateinit var btnLogin: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,23 +35,29 @@ class ListActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+        // TODO: Stub to ease checks
+        Preferences.deleteToken()
+    }
+
+    override fun offerToCreateNewPost() {
+        showNewPostDialog()
+    }
+
     private fun setupFab() {
         fabNewPost.setOnClickListener {
-            AlertDialog.Builder(this)
-                .setIcon(R.drawable.ic_chat)
-                .setTitle(getString(R.string.new_post))
-                .setView(LayoutInflater.from(this).inflate(R.layout.view_new_post, null))
-                .setPositiveButton(R.string.send) { dialog, which ->
-                    shortToast(R.string.send)
-                    dialog.dismiss()
-                }
-                .setNegativeButton(R.string.cancel) { dialog, which ->
-                    shortToast(R.string.cancel)
-                    dialog.dismiss()
-                }
-                .create()
-                .show()
+            if (!isLoggedIn()) {
+                showLoginDialog(true)
+            } else {
+                showNewPostDialog()
+            }
         }
+    }
+
+    private fun showNewPostDialog() {
+        // TODO: DialogFragment
+        NewPostDialogFragment.newInstance().show(supportFragmentManager, NewPostDialogFragment.TAG)
     }
 
     private fun setupNavigationDrawer() {
@@ -60,6 +71,27 @@ class ListActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         drawerLayoutMain.addDrawerListener(toggle)
         toggle.syncState()
         navigationView.setNavigationItemSelectedListener(this)
+        val header = navigationView.getHeaderView(0)
+        tvUserName = header.findViewById(R.id.tvUserName)
+        btnLogin = header.findViewById(R.id.btnLogin)
+        if (isLoggedIn()) {
+            tvUserName.text = getString(R.string.authorized)
+            btnLogin.visibility = View.GONE
+        }
+        btnLogin.setOnClickListener {
+            showLoginDialog(false)
+        }
+        Preferences.addTokenListener(object : Preferences.OnTokenChangedListener {
+            override fun onTokenChanged() {
+                if (isLoggedIn()) {
+                    tvUserName.text = getString(R.string.authorized)
+                    btnLogin.visibility = View.GONE
+                } else {
+                    tvUserName.text = getString(R.string.nav_header_name)
+                    btnLogin.visibility = View.VISIBLE
+                }
+            }
+        })
     }
 
     override fun onBackPressed() {

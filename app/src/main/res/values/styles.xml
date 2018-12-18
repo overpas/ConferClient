@@ -17,7 +17,7 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <style name="SmallLoginButton" parent="Widget.AppCompat.Button">
+    <style name="SimpleButton" parent="Widget.AppCompat.Button">
         <item name="android:background">@drawable/bg_btn_small_login</item>
         <item name="android:textColorHint">@color/colorPrimary</item>
         <item name="android:minHeight">0dp</item>
@@ -26,6 +26,13 @@
         <item name="android:paddingTop">@dimen/padding_xxs</item>
         <item name="android:paddingStart">@dimen/padding_xl</item>
         <item name="android:paddingEnd">@dimen/padding_xl</item>
+        <item name="android:textSize">@dimen/text_size_m</item>
+    </style>
+
+    <style name="CustomDialogButton">
+        <item name="android:layout_marginTop">@dimen/margin_l</item>
+        <item name="android:background">@null</item>
+        <item name="android:textColorHint">@color/colorAccent</item>
         <item name="android:textSize">@dimen/text_size_m</item>
     </style>
 

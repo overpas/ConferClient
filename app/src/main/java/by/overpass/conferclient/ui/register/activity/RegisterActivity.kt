@@ -11,8 +11,15 @@ class RegisterActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
+        supportActionBar?.run {
+            setDisplayHomeAsUpEnabled(true)
+        }
         if (savedInstanceState == null) {
-            replaceFragment(RegisterFragment.newInstance(), R.id.flRegistrationFragmentContainer, false)
+            replaceFragment(
+                RegisterFragment.newInstance(),
+                R.id.flRegistrationFragmentContainer,
+                false
+            )
         }
     }
 }

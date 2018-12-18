@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/ivChatImage"
+        android:layout_width="@dimen/size_dialog_icon"
+        android:layout_height="@dimen/size_dialog_icon"
+        android:layout_marginStart="@dimen/margin_dialog_title"
+        android:layout_marginTop="@dimen/margin_l"
+        android:contentDescription="@string/user"
+        android:src="@drawable/ic_chat"
+        app:layout_constraintEnd_toStartOf="@+id/tvDialogTitle"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/pbLoading"
+        android:layout_width="@dimen/size_dialog_icon"
+        android:layout_height="@dimen/size_dialog_icon"
+        android:layout_marginStart="@dimen/margin_dialog_progress_bar"
+        android:layout_marginTop="@dimen/margin_l"
+        android:visibility="gone"
+        app:layout_constraintEnd_toStartOf="@+id/tvDialogTitle"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvDialogTitle"
+        style="@style/PostTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_xl"
+        android:text="@string/new_post"
+        android:textSize="@dimen/text_size_xl"
+        app:layout_constraintBottom_toTopOf="@id/tilTitle"
+        app:layout_constraintStart_toEndOf="@+id/ivChatImage"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/tilTitle"
+        android:layout_width="@dimen/width_dialog_et"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_s"
+        android:layout_marginTop="@dimen/margin_l"
+        android:layout_marginEnd="@dimen/margin_s"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ivChatImage">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/etTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/title"
+            android:inputType="text"
+            android:maxLines="1"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="Autofill,LabelFor" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/tilBody"
+        android:layout_width="@dimen/width_dialog_et"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_s"
+        android:layout_marginEnd="@dimen/margin_s"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tilTitle">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/etBody"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/your_text"
+            android:inputType="textMultiLine"
+            android:maxLines="1"
+            tools:ignore="Autofill,LabelFor" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <Button
+        android:id="@+id/btnCancel"
+        style="@style/CustomDialogButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="@string/cancel"
+        app:layout_constraintEnd_toStartOf="@+id/btnSend"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tilBody" />
+
+    <Button
+        android:id="@+id/btnSend"
+        style="@style/CustomDialogButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="@string/send"
+        android:textColorHint="@color/colorAccent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/btnCancel"
+        app:layout_constraintTop_toBottomOf="@id/tilBody" />
+
+
+</android.support.constraint.ConstraintLayout>

@@ -1,4 +1,4 @@
-package by.overpass.conferclient.ui.list.popular.fragment
+package by.overpass.conferclient.ui.list.fragment.popular
 
 import android.arch.lifecycle.Observer
 import android.os.Bundle
@@ -7,7 +7,7 @@ import android.view.MenuItem
 import android.view.View
 import by.overpass.conferclient.R
 import by.overpass.conferclient.ui.base.fragment.PostListFragment
-import by.overpass.conferclient.ui.list.popular.adapter.PopularPostAdapter
+import by.overpass.conferclient.ui.list.fragment.popular.adapter.PopularPostAdapter
 import by.overpass.conferclient.util.getVm
 import by.overpass.conferclient.util.shortToast
 import by.overpass.conferclient.viewmodel.popular.PopularViewModel
@@ -58,7 +58,8 @@ class PopularFragment : PostListFragment() {
 
     companion object {
         @JvmStatic
-        fun newInstance() = PopularFragment()
+        fun newInstance() =
+            PopularFragment()
     }
 
 }

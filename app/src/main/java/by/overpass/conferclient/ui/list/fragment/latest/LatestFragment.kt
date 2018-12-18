@@ -1,4 +1,4 @@
-package by.overpass.conferclient.ui.list.latest.fragment
+package by.overpass.conferclient.ui.list.fragment.latest
 
 
 import android.view.MenuItem
@@ -24,6 +24,7 @@ class LatestFragment : PostListFragment() {
 
     companion object {
         @JvmStatic
-        fun newInstance() = LatestFragment()
+        fun newInstance() =
+            LatestFragment()
     }
 }

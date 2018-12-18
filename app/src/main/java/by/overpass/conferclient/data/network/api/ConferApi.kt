@@ -1,11 +1,10 @@
 package by.overpass.conferclient.data.network.api
 
+import by.overpass.conferclient.data.dto.UserRegistration
 import by.overpass.conferclient.data.network.pojo.Post
 import retrofit2.Call
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Path
-import retrofit2.http.Query
+import retrofit2.Response
+import retrofit2.http.*
 
 const val API_POSTS = "/api/posts"
 
@@ -25,8 +24,7 @@ interface ConferApi {
     @POST
     fun createNewPost()
 
-    // TODO Implement
-    @POST
-    fun register()
+    @POST("/api/auth/register")
+    fun register(@Body userRegistration: UserRegistration): Call<Void>
 
 }

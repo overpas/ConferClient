@@ -6,7 +6,13 @@ import java.util.concurrent.Executors
 
 private val cpuCount = Runtime.getRuntime().availableProcessors()
 private val desiredThreadNumber = (2 + cpuCount / 2) / 2
-private val backgroundExecutor = Executors.newFixedThreadPool(if (desiredThreadNumber > 1) desiredThreadNumber else 2)
+private val backgroundExecutor = Executors.newFixedThreadPool(
+    if (desiredThreadNumber > 1) {
+        desiredThreadNumber
+    } else {
+        2
+    }
+)
 private val uiHandler = Handler(Looper.getMainLooper())
 
 fun runInBackground(task: () -> Unit) {

@@ -1,4 +1,4 @@
-package by.overpass.conferclient.ui.list.popular.adapter
+package by.overpass.conferclient.ui.list.fragment.popular.adapter
 
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
@@ -15,7 +15,12 @@ class PopularPostAdapter : RecyclerView.Adapter<PopularPostAdapter.ViewHolder>()
 
     var posts: List<PostWithUser> = listOf()
         set(value) {
-            val diffResult = DiffUtil.calculateDiff(PostDiff(field, value))
+            val diffResult = DiffUtil.calculateDiff(
+                PostDiff(
+                    field,
+                    value
+                )
+            )
             field = value
             diffResult.dispatchUpdatesTo(this)
         }
@@ -23,7 +28,11 @@ class PopularPostAdapter : RecyclerView.Adapter<PopularPostAdapter.ViewHolder>()
     override fun onCreateViewHolder(parent: ViewGroup, p1: Int): ViewHolder {
         return LayoutInflater.from(parent.context)
                 .run { inflate(R.layout.item_post, parent, false) }
-                .run { ViewHolder(this) }
+                .run {
+                    ViewHolder(
+                        this
+                    )
+                }
     }
 
     override fun getItemCount(): Int = posts.size
