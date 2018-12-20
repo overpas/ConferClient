@@ -44,15 +44,19 @@ class PostFragment : Fragment() {
     }
 
     private fun onPostTreeReceived(postTree: PostTree) {
-        addPostTreeView(postTree, 0)
+        addPostTreeView(postTree, 0, llPostTreeContainer.top)
     }
 
-    private fun addPostTreeView(postTree: PostTree, replyLevel: Int) {
+    private fun addPostTreeView(postTree: PostTree, replyLevel: Int, parentTop: Int) {
         val postTreeView = LayoutInflater.from(context).run {
             inflate(R.layout.item_post_tree, llPostTreeContainer, false)
         }
         if (replyLevel == 0) {
             postTreeView.ivReplyImage.visibility = View.GONE
+        } else {
+            postTreeView.ivReplyImage.setOnClickListener {
+                svPostParent.scrollTo(0, parentTop)
+            }
         }
         postTreeView.tvTitle.text = postTree.title
         postTreeView.tvBody.text = postTree.body
@@ -65,7 +69,7 @@ class PostFragment : Fragment() {
         llPostTreeContainer.addView(postTreeView)
         if (postTree.replies != null) {
             postTree.replies!!.forEach {
-                addPostTreeView(it, replyLevel + 1)
+                addPostTreeView(it, replyLevel + 1, postTreeView.top)
             }
         }
     }
