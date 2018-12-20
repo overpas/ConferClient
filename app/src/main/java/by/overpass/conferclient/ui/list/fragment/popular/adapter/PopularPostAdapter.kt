@@ -9,7 +9,7 @@ import by.overpass.conferclient.R
 import by.overpass.conferclient.data.dto.PostWithUser
 import by.overpass.conferclient.ui.post.activity.PostActivity
 import by.overpass.conferclient.util.formatPostDate
-import kotlinx.android.synthetic.main.item_post.view.*
+import kotlinx.android.synthetic.main.adapter_item_post.view.*
 
 
 class PopularPostAdapter : RecyclerView.Adapter<PopularPostAdapter.ViewHolder>() {
@@ -28,7 +28,7 @@ class PopularPostAdapter : RecyclerView.Adapter<PopularPostAdapter.ViewHolder>()
 
     override fun onCreateViewHolder(parent: ViewGroup, p1: Int): ViewHolder {
         return LayoutInflater.from(parent.context)
-            .run { inflate(R.layout.item_post, parent, false) }
+            .run { inflate(R.layout.adapter_item_post, parent, false) }
             .run { ViewHolder(this) }
     }
 

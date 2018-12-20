@@ -6,9 +6,12 @@ import android.support.v4.app.Fragment
 import android.view.*
 import by.overpass.conferclient.R
 import by.overpass.conferclient.data.network.dto.PostTree
+import by.overpass.conferclient.util.formatPostDate
 import by.overpass.conferclient.util.getVm
 import by.overpass.conferclient.viewmodel.post.PostViewModel
 import kotlinx.android.synthetic.main.fragment_post.*
+import kotlinx.android.synthetic.main.item_post_tree.view.*
+import java.util.*
 
 class PostFragment : Fragment() {
 
@@ -20,9 +23,9 @@ class PostFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_post, container, false)
     }
@@ -41,7 +44,30 @@ class PostFragment : Fragment() {
     }
 
     private fun onPostTreeReceived(postTree: PostTree) {
-        tvStubPostTree.text = postTree.toString()
+        addPostTreeView(postTree, 0)
+    }
+
+    private fun addPostTreeView(postTree: PostTree, replyLevel: Int) {
+        val postTreeView = LayoutInflater.from(context).run {
+            inflate(R.layout.item_post_tree, llPostTreeContainer, false)
+        }
+        if (replyLevel == 0) {
+            postTreeView.ivReplyImage.visibility = View.GONE
+        }
+        postTreeView.tvTitle.text = postTree.title
+        postTreeView.tvBody.text = postTree.body
+        postTreeView.tvFullName.text = postTree.authorFullName
+        postTreeView.tvUsername.text = postTree.authorUsername
+        postTreeView.tvDate.text = formatPostDate(Date(postTree.date))
+        val layoutParams = postTreeView.layoutParams as ViewGroup.MarginLayoutParams
+        layoutParams.marginStart = layoutParams.marginStart + RELATIVE_LEVEL_MARGIN * replyLevel
+        postTreeView.layoutParams = layoutParams
+        llPostTreeContainer.addView(postTreeView)
+        if (postTree.replies != null) {
+            postTree.replies!!.forEach {
+                addPostTreeView(it, replyLevel + 1)
+            }
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -60,12 +86,13 @@ class PostFragment : Fragment() {
     companion object {
         val TAG = PostFragment::class.java.simpleName
         private const val POST_ID_KEY = "POST_ID_KEY"
+        private const val RELATIVE_LEVEL_MARGIN = 40
 
         fun newInstance(postId: Long) = Bundle()
-            .apply { putLong(POST_ID_KEY, postId) }
-            .run {
-                PostFragment().also { it.arguments = this }
-            }
+                .apply { putLong(POST_ID_KEY, postId) }
+                .run {
+                    PostFragment().also { it.arguments = this }
+                }
     }
 
 }

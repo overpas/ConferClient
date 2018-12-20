@@ -112,6 +112,9 @@ class ListActivity : BaseAuthActivity(), NavigationView.OnNavigationItemSelected
             R.id.action_about -> {
 
             }
+            R.id.action_logout -> {
+                Preferences.deleteToken()
+            }
         }
         drawerLayoutMain.closeDrawer(GravityCompat.START)
         return true

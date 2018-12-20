@@ -22,4 +22,12 @@
             android:title="@string/about" />
     </group>
 
+    <group
+        android:id="@+id/group_logout"
+        android:checkableBehavior="none">
+        <item
+            android:id="@+id/action_logout"
+            android:title="@string/logout" />
+    </group>
+
 </menu>
