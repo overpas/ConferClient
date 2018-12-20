@@ -11,7 +11,7 @@ import by.overpass.conferclient.R
 import by.overpass.conferclient.data.dto.PostCreationStatus
 import by.overpass.conferclient.util.getVm
 import by.overpass.conferclient.util.shortToast
-import by.overpass.conferclient.viewmodel.login.ListViewModel
+import by.overpass.conferclient.viewmodel.list.ListViewModel
 import kotlinx.android.synthetic.main.dialog_new_post.*
 
 class NewPostDialogFragment : DialogFragment() {
@@ -59,7 +59,7 @@ class NewPostDialogFragment : DialogFragment() {
     }
 
     private fun onSendClicked() {
-        setLoading()
+        setLoading(true)
         viewModel.newPost().observe(this, Observer {
             if (it != null) {
                 onPostCreationStatusChanged(it)
@@ -71,12 +71,12 @@ class NewPostDialogFragment : DialogFragment() {
         when (postCreationStatus) {
             is PostCreationStatus.Error -> {
                 // TODO: Error
-                unsetLoading()
+                setLoading(false)
                 shortToast(postCreationStatus.message)
                 dismiss()
             }
             is PostCreationStatus.Success -> {
-                unsetLoading()
+                setLoading(false)
                 shortToast("New Post Created with id = ${postCreationStatus.postId}")
                 dismiss()
             }
@@ -86,26 +86,15 @@ class NewPostDialogFragment : DialogFragment() {
         }
     }
 
-    private fun setLoading() {
-        pbLoading.visibility = View.VISIBLE
-        ivChatImage.visibility = View.INVISIBLE
-        btnCancel.isClickable = false
-        btnSend.isClickable = false
-        etTitle.isFocusable = false
-        etTitle.isFocusableInTouchMode = false
-        etBody.isFocusable = false
-        etBody.isFocusableInTouchMode = false
-    }
-
-    private fun unsetLoading() {
-        pbLoading.visibility = View.GONE
-        ivChatImage.visibility = View.VISIBLE
-        btnCancel.isClickable = true
-        btnSend.isClickable = true
-        etTitle.isFocusable = true
-        etTitle.isFocusableInTouchMode = true
-        etBody.isFocusable = true
-        etBody.isFocusableInTouchMode = true
+    private fun setLoading(loading: Boolean) {
+        pbLoading.visibility = if (loading) View.VISIBLE else View.GONE
+        ivChatImage.visibility = if (loading) View.INVISIBLE else View.VISIBLE
+        btnCancel.isClickable = !loading
+        btnSend.isClickable = !loading
+        etTitle.isFocusable = !loading
+        etTitle.isFocusableInTouchMode = !loading
+        etBody.isFocusable = !loading
+        etBody.isFocusableInTouchMode = !loading
     }
 
     interface NewPostDialogCreator {

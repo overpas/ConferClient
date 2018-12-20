@@ -1,12 +1,15 @@
 package by.overpass.conferclient.data.network.api
 
 import by.overpass.conferclient.data.dto.UserRegistration
-import by.overpass.conferclient.data.network.pojo.Post
+import by.overpass.conferclient.data.network.dto.Post
+import by.overpass.conferclient.data.network.dto.PostTree
+import by.overpass.conferclient.data.network.dto.TokenResponse
 import retrofit2.Call
-import retrofit2.Response
 import retrofit2.http.*
 
-const val API_POSTS = "/api/posts"
+private const val API = "/api"
+private const val API_POSTS = "$API/posts"
+private const val GRANT_TYPE_PASSWORD = "password"
 
 interface ConferApi {
 
@@ -16,15 +19,23 @@ interface ConferApi {
     @GET("$API_POSTS/latest")
     fun getLatest(@Query("start") start: Int, @Query("size") size: Int): Call<List<Post>>
 
-    // TODO Implement
     @GET("$API_POSTS/{id}")
-    fun getPostById(@Path("id") id: Long)
+    fun getPostById(@Path("id") id: Long): Call<PostTree>
 
     // TODO Implement
     @POST
     fun createNewPost()
 
-    @POST("/api/auth/register")
+    @POST("$API/auth/register")
     fun register(@Body userRegistration: UserRegistration): Call<Void>
+
+    @POST("/oauth/token")
+    @FormUrlEncoded
+    fun login(
+        @Header("Authorization") basic: String,
+        @Field("username") username: String,
+        @Field("password") password: String,
+        @Field("grant_type") grantType: String = GRANT_TYPE_PASSWORD
+    ): Call<TokenResponse>
 
 }

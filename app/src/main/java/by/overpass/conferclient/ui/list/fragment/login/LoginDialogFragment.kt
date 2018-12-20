@@ -11,10 +11,10 @@ import android.view.ViewGroup
 import by.overpass.conferclient.R
 import by.overpass.conferclient.data.dto.AuthStatus
 import by.overpass.conferclient.ui.register.activity.RegisterActivity
-import by.overpass.conferclient.util.Preferences
 import by.overpass.conferclient.util.getVm
 import by.overpass.conferclient.util.shortToast
-import by.overpass.conferclient.viewmodel.login.ListViewModel
+import by.overpass.conferclient.util.text
+import by.overpass.conferclient.viewmodel.list.ListViewModel
 import kotlinx.android.synthetic.main.dialog_login.*
 
 class LoginDialogFragment : DialogFragment() {
@@ -66,7 +66,9 @@ class LoginDialogFragment : DialogFragment() {
 
     private fun onLoginClicked() {
         setLoading()
-        viewModel.login().observe(this, Observer {
+        val username = etUsername.text()
+        val password = etPassword.text()
+        viewModel.login(username, password).observe(this, Observer {
             if (it != null) {
                 onAuthStatusChanged(it)
             }
@@ -104,21 +106,18 @@ class LoginDialogFragment : DialogFragment() {
     private fun onAuthStatusChanged(authStatus: AuthStatus) {
         when (authStatus) {
             is AuthStatus.Error -> {
-                // TODO: Error
                 unsetLoading()
                 shortToast(authStatus.message)
                 dismiss()
             }
             is AuthStatus.LoggedIn -> {
                 unsetLoading()
-                Preferences.saveToken(authStatus.token)
                 val shouldOfferToCreateNewPost =
                     arguments?.getBoolean(SHOULD_CREATE_NEW_POST_KEY, false) ?: false
                 onLoggedInListener?.onLoggedIn(shouldOfferToCreateNewPost)
                 dismiss()
             }
             else -> {
-                // TODO: Loading
             }
         }
     }

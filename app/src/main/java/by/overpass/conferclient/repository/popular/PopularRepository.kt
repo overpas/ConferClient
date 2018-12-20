@@ -4,19 +4,17 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.content.Context
 import by.overpass.conferclient.data.db.ConferDatabase
-import by.overpass.conferclient.data.db.entity.User
 import by.overpass.conferclient.data.dto.PostWithUser
 import by.overpass.conferclient.data.mapper.Mapper
 import by.overpass.conferclient.data.network.CLIENT
 import by.overpass.conferclient.data.network.api.ConferApi
-import by.overpass.conferclient.data.network.pojo.Post
+import by.overpass.conferclient.data.network.dto.Post
 import by.overpass.conferclient.util.runInBackground
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import timber.log.Timber
 import java.net.SocketTimeoutException
-import java.util.*
 
 private const val DEFAULT_LIMIT = 10
 

@@ -1,4 +1,4 @@
-package by.overpass.conferclient.data.network.pojo
+package by.overpass.conferclient.data.network.dto
 
 import com.google.gson.annotations.SerializedName
 

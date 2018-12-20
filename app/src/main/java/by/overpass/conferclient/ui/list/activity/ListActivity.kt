@@ -9,7 +9,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import by.overpass.conferclient.R
-import by.overpass.conferclient.ui.base.activity.BaseActivity
+import by.overpass.conferclient.ui.base.activity.BaseAuthActivity
 import by.overpass.conferclient.ui.list.fragment.create.NewPostDialogFragment
 import by.overpass.conferclient.ui.list.fragment.latest.LatestFragment
 import by.overpass.conferclient.ui.list.fragment.popular.PopularFragment
@@ -18,7 +18,7 @@ import by.overpass.conferclient.util.replaceFragment
 import kotlinx.android.synthetic.main.activity_list.*
 import kotlinx.android.synthetic.main.app_bar_list.*
 
-class ListActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
+class ListActivity : BaseAuthActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private lateinit var tvUserName: TextView
     private lateinit var btnLogin: Button
@@ -38,7 +38,7 @@ class ListActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     override fun onPause() {
         super.onPause()
         // TODO: Stub to ease checks
-        Preferences.deleteToken()
+//        Preferences.deleteToken()
     }
 
     override fun offerToCreateNewPost() {
@@ -56,7 +56,6 @@ class ListActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
     private fun showNewPostDialog() {
-        // TODO: DialogFragment
         NewPostDialogFragment.newInstance().show(supportFragmentManager, NewPostDialogFragment.TAG)
     }
 

@@ -25,4 +25,6 @@
     <string name="password">Password</string>
     <string name="user">User</string>
     <string name="authorized">Authorized</string>
+    <string name="registration_error">Error. Please, try again later</string>
+    <string name="registration_success">Success! You can now login</string>
 </resources>

@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentTransaction
 import android.support.v7.app.AppCompatActivity
+import android.widget.EditText
 import android.widget.Toast
 import by.overpass.conferclient.ConferApp
 
@@ -46,3 +47,5 @@ fun Fragment.shortToast(@StringRes stringRes: Int) {
 fun AppCompatActivity.shortToast(@StringRes stringRes: Int) {
     Toast.makeText(this, stringRes, Toast.LENGTH_SHORT).show()
 }
+
+fun EditText.text() = text.toString().trim()

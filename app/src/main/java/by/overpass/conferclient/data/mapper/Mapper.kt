@@ -1,7 +1,7 @@
 package by.overpass.conferclient.data.mapper
 
 import by.overpass.conferclient.data.db.entity.User
-import by.overpass.conferclient.data.network.pojo.Post
+import by.overpass.conferclient.data.network.dto.Post
 import java.util.*
 
 class Mapper {

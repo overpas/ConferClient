@@ -7,25 +7,51 @@ import by.overpass.conferclient.data.dto.AuthStatus
 import by.overpass.conferclient.data.dto.PostCreationStatus
 import by.overpass.conferclient.data.network.CLIENT
 import by.overpass.conferclient.data.network.api.ConferApi
+import by.overpass.conferclient.data.network.dto.TokenResponse
+import by.overpass.conferclient.util.Preferences
 import by.overpass.conferclient.util.runInBackground
 import by.overpass.conferclient.util.runOnUI
+import okhttp3.Credentials
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import timber.log.Timber
+
+private const val CLIENT_ID = "confer-client"
+private const val CLIENT_SECRET = "confer-secret"
 
 class ListRepository(context: Context) {
 
     private val conferApi = CLIENT.create(ConferApi::class.java)
 
-    fun login(): LiveData<AuthStatus> {
-        // TODO: Use simple get/refresh auth token
+    fun login(username: String, password: String): LiveData<AuthStatus> {
         val authStatusData = MutableLiveData<AuthStatus>()
         authStatusData.value = AuthStatus.Loading
-        runInBackground {
-            Thread.sleep(3000)
-            // TODO: If failed -> value = AuthStatus.Error(message)
-            runOnUI {
-                // TODO: Stub
-                authStatusData.value = AuthStatus.LoggedIn("123")
-            }
-        }
+        conferApi.login(getBasicAuthHeader(), username, password)
+            .enqueue(object : Callback<TokenResponse> {
+                override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
+                    Timber.e(t)
+                    t.message?.run {
+                        authStatusData.value = AuthStatus.Error(this)
+                    }
+                }
+
+                override fun onResponse(
+                    call: Call<TokenResponse>,
+                    response: Response<TokenResponse>
+                ) {
+                    if (response.isSuccessful && response.body() != null) {
+                        val accessToken = response.body()!!.accessToken
+                        authStatusData.value = AuthStatus.LoggedIn(accessToken)
+                        runInBackground {
+                            Preferences.saveToken(accessToken)
+                        }
+                    } else {
+                        authStatusData.value = AuthStatus.Error(response.message())
+                    }
+                }
+
+            })
         return authStatusData
     }
 
@@ -45,3 +71,5 @@ class ListRepository(context: Context) {
     }
 
 }
+
+private fun getBasicAuthHeader() = Credentials.basic(CLIENT_ID, CLIENT_SECRET)
