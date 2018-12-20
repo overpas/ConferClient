@@ -74,7 +74,6 @@ class RegisterFragment : Fragment() {
         if (!doPasswordsMatch()) {
             return
         }
-        setLoading(true)
         viewModel.register(gatherInfo()).observe(this, Observer {
             it?.run {
                 setLoading(false)
@@ -94,13 +93,16 @@ class RegisterFragment : Fragment() {
     private fun onRegistrationStatusReceived(registrationStatus: RegistrationStatus) {
         when (registrationStatus) {
             is RegistrationStatus.Error -> {
+                setLoading(false)
                 shortToast(registrationStatus.message)
             }
             is RegistrationStatus.Success -> {
+                setLoading(false)
                 shortToast(getString(R.string.registration_success))
                 activity?.finish()
             }
             else -> {
+                setLoading(true)
             }
         }
     }

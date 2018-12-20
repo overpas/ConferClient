@@ -36,7 +36,7 @@ interface PostDao {
     // Seems to work
     @Query(
         """SELECT post1.*, User.* FROM Post as post1 LEFT JOIN User ON post1.userId = User.user_id
-        GROUP BY post1.post_id ORDER BY (SELECT COUNT(*) FROM Post as post2 WHERE post2.inReplyTo = post1.post_id)
+        ORDER BY (SELECT COUNT(*) FROM Post as post2 WHERE post2.inReplyTo = post1.post_id)
         DESC LIMIT :limit"""
     )
     fun findMostPopularWithUser(limit: Long): LiveData<List<PostWithUser>>

@@ -11,7 +11,6 @@ class ConferApp : Application() {
         super.onCreate()
         instance = this
         Timber.plant(Timber.DebugTree())
-        Preferences.deleteToken()
     }
 
     companion object {

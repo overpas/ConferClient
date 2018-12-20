@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.MenuItem
 import android.view.View
+import android.widget.AdapterView
 import by.overpass.conferclient.R
 import by.overpass.conferclient.ui.base.fragment.PostListFragment
 import by.overpass.conferclient.ui.list.fragment.popular.adapter.PopularPostAdapter

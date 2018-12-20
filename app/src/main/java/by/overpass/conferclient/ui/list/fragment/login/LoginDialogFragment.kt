@@ -65,7 +65,6 @@ class LoginDialogFragment : DialogFragment() {
     }
 
     private fun onLoginClicked() {
-        setLoading()
         val username = etUsername.text()
         val password = etPassword.text()
         viewModel.login(username, password).observe(this, Observer {
@@ -79,45 +78,34 @@ class LoginDialogFragment : DialogFragment() {
         startActivity(Intent(context, RegisterActivity::class.java))
     }
 
-    private fun setLoading() {
-        pbLoading.visibility = View.VISIBLE
-        ivLoginImage.visibility = View.INVISIBLE
-        btnCancel.isClickable = false
-        btnLogin.isClickable = false
-        btnNotRegistered.isClickable = false
-        etUsername.isFocusable = false
-        etUsername.isFocusableInTouchMode = false
-        etPassword.isFocusable = false
-        etPassword.isFocusableInTouchMode = false
-    }
-
-    private fun unsetLoading() {
-        pbLoading.visibility = View.GONE
-        ivLoginImage.visibility = View.VISIBLE
-        btnCancel.isClickable = true
-        btnLogin.isClickable = true
-        btnNotRegistered.isClickable = true
-        etUsername.isFocusable = true
-        etUsername.isFocusableInTouchMode = true
-        etPassword.isFocusable = true
-        etPassword.isFocusableInTouchMode = true
+    private fun setLoading(loading: Boolean) {
+        pbLoading.visibility = if (loading) View.VISIBLE else View.GONE
+        ivLoginImage.visibility = if (loading) View.INVISIBLE else View.VISIBLE
+        btnCancel.isClickable = !loading
+        btnLogin.isClickable = !loading
+        btnNotRegistered.isClickable = !loading
+        etUsername.isFocusable = !loading
+        etUsername.isFocusableInTouchMode = !loading
+        etPassword.isFocusable = !loading
+        etPassword.isFocusableInTouchMode = !loading
     }
 
     private fun onAuthStatusChanged(authStatus: AuthStatus) {
         when (authStatus) {
             is AuthStatus.Error -> {
-                unsetLoading()
+                setLoading(false)
                 shortToast(authStatus.message)
                 dismiss()
             }
             is AuthStatus.LoggedIn -> {
-                unsetLoading()
+                setLoading(false)
                 val shouldOfferToCreateNewPost =
                     arguments?.getBoolean(SHOULD_CREATE_NEW_POST_KEY, false) ?: false
                 onLoggedInListener?.onLoggedIn(shouldOfferToCreateNewPost)
                 dismiss()
             }
             else -> {
+                setLoading(true)
             }
         }
     }

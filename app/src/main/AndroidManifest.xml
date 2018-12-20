@@ -24,8 +24,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:label="@string/register"
-            android:name=".ui.register.activity.RegisterActivity" />
+            android:name=".ui.register.activity.RegisterActivity"
+            android:label="@string/register" />
+        <activity android:name=".ui.post.activity.PostActivity"></activity>
     </application>
 
 </manifest>

@@ -59,7 +59,6 @@ class NewPostDialogFragment : DialogFragment() {
     }
 
     private fun onSendClicked() {
-        setLoading(true)
         viewModel.newPost().observe(this, Observer {
             if (it != null) {
                 onPostCreationStatusChanged(it)
@@ -81,7 +80,7 @@ class NewPostDialogFragment : DialogFragment() {
                 dismiss()
             }
             else -> {
-                // TODO: Loading
+                setLoading(true)
             }
         }
     }
