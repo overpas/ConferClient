@@ -19,6 +19,10 @@ object Preferences {
         }
     }
 
+    init {
+        prefs.registerOnSharedPreferenceChangeListener(listener)
+    }
+
     fun saveToken(token: String) {
         prefs.edit()
             .putString(AUTH_TOKEN_KEY, token)
@@ -39,7 +43,6 @@ object Preferences {
         if (!tokenChangedListeners.contains(tokenChangedListener)) {
             tokenChangedListeners.add(tokenChangedListener)
         }
-        prefs.registerOnSharedPreferenceChangeListener(listener)
     }
 
     fun removeTokenListener(tokenChangedListener: OnTokenChangedListener) {

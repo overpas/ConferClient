@@ -11,7 +11,7 @@ import android.view.ViewGroup
 import by.overpass.conferclient.R
 import by.overpass.conferclient.data.dto.AuthStatus
 import by.overpass.conferclient.ui.register.activity.RegisterActivity
-import by.overpass.conferclient.util.getVm
+import by.overpass.conferclient.util.parentVm
 import by.overpass.conferclient.util.shortToast
 import by.overpass.conferclient.util.text
 import by.overpass.conferclient.viewmodel.list.ListViewModel
@@ -21,7 +21,7 @@ class LoginDialogFragment : DialogFragment() {
 
     private var onLoggedInListener: OnLoggedInListener? = null
 
-    private lateinit var viewModel: ListViewModel
+    private val viewModel: ListViewModel by parentVm(ListViewModel.Factory::class.java)
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
@@ -42,7 +42,6 @@ class LoginDialogFragment : DialogFragment() {
 
     override fun onViewCreated(theView: View, savedInstanceState: Bundle?) {
         super.onViewCreated(theView, savedInstanceState)
-        viewModel = getVm(activity!!, ListViewModel::class.java, ListViewModel.Factory::class.java)
         btnLogin.setOnClickListener { view ->
             onLoginClicked()
         }

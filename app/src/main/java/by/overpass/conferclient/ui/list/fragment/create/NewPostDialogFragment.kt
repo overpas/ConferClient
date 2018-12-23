@@ -9,7 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import by.overpass.conferclient.R
 import by.overpass.conferclient.data.dto.PostCreationStatus
-import by.overpass.conferclient.util.getVm
+import by.overpass.conferclient.util.parentVm
 import by.overpass.conferclient.util.shortToast
 import by.overpass.conferclient.viewmodel.list.ListViewModel
 import kotlinx.android.synthetic.main.dialog_new_post.*
@@ -18,7 +18,7 @@ class NewPostDialogFragment : DialogFragment() {
 
     private var newPostDialogCreator: NewPostDialogCreator? = null
 
-    private lateinit var viewModel: ListViewModel
+    private val viewModel: ListViewModel by parentVm(ListViewModel.Factory::class.java)
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
@@ -39,7 +39,6 @@ class NewPostDialogFragment : DialogFragment() {
 
     override fun onViewCreated(theView: View, savedInstanceState: Bundle?) {
         super.onViewCreated(theView, savedInstanceState)
-        viewModel = getVm(activity!!, ListViewModel::class.java, ListViewModel.Factory::class.java)
         btnSend.setOnClickListener { view ->
             onSendClicked()
         }

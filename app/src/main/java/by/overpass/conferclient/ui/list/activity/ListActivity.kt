@@ -35,28 +35,10 @@ class ListActivity : BaseAuthActivity(), NavigationView.OnNavigationItemSelected
         }
     }
 
-    override fun onPause() {
-        super.onPause()
-        // TODO: Stub to ease checks
-//        Preferences.deleteToken()
-    }
-
-    override fun offerToCreateNewPost() {
-        showNewPostDialog()
-    }
-
     private fun setupFab() {
         fabNewPost.setOnClickListener {
-            if (!isLoggedIn()) {
-                showLoginDialog(true)
-            } else {
-                showNewPostDialog()
-            }
+            attemptNewPost()
         }
-    }
-
-    private fun showNewPostDialog() {
-        NewPostDialogFragment.newInstance().show(supportFragmentManager, NewPostDialogFragment.TAG)
     }
 
     private fun setupNavigationDrawer() {

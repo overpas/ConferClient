@@ -5,6 +5,7 @@ import android.arch.lifecycle.MutableLiveData
 import android.content.Context
 import by.overpass.conferclient.data.db.ConferDatabase
 import by.overpass.conferclient.data.dto.PostWithUser
+import by.overpass.conferclient.data.dto.Status
 import by.overpass.conferclient.data.mapper.Mapper
 import by.overpass.conferclient.data.network.CLIENT
 import by.overpass.conferclient.data.network.api.ConferApi
@@ -18,14 +19,17 @@ import java.net.SocketTimeoutException
 
 private const val DEFAULT_LIMIT = 10
 
-class PopularRepository(context: Context) {
+class PopularRepository(private val progress: MutableLiveData<Status>, context: Context) {
 
     private val conferApi = CLIENT.create(ConferApi::class.java)
     private val mapper = Mapper()
     private val postDao = ConferDatabase.getInstance(context).getPostDao()
     private val userDao = ConferDatabase.getInstance(context).getUserDao()
 
-    fun getPopularNoCache(limit: Int = DEFAULT_LIMIT, retried: Boolean = false): LiveData<List<Post>> {
+    fun getPopularNoCache(
+        limit: Int = DEFAULT_LIMIT,
+        retried: Boolean = false
+    ): LiveData<List<Post>> {
         val popularPosts = MutableLiveData<List<Post>>()
         conferApi.getPopular(limit).enqueue(object : Callback<List<Post>> {
             override fun onFailure(call: Call<List<Post>>, t: Throwable) {
@@ -45,13 +49,15 @@ class PopularRepository(context: Context) {
         return popularPosts
     }
 
-    fun getPopular(limit: Int = DEFAULT_LIMIT, retried: Boolean = false): LiveData<List<PostWithUser>> {
+    fun getPopular(
+        limit: Int = DEFAULT_LIMIT,
+        retried: Boolean = false
+    ): LiveData<List<PostWithUser>> {
+        progress.value = Status.Loading
         conferApi.getPopular(limit).enqueue(object : Callback<List<Post>> {
             override fun onFailure(call: Call<List<Post>>, t: Throwable) {
-                if (t is SocketTimeoutException && !retried) {
-                    getPopular(limit, true)
-                }
                 Timber.e(t)
+                progress.value = Status.Error(t.message ?: "Something went wrong")
             }
 
             override fun onResponse(call: Call<List<Post>>, response: Response<List<Post>>) {
@@ -63,7 +69,7 @@ class PopularRepository(context: Context) {
                         userDao.insert(dbUsers)
                         postDao.insert(dbPosts)
                     }
-
+                    progress.value = Status.Success
                 }
             }
 

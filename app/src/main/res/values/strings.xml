@@ -28,4 +28,11 @@
     <string name="registration_error">Error. Please, try again later</string>
     <string name="registration_success">Success! You can now login</string>
     <string name="logout">Logout</string>
+    <string name="email">Email</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="bad_username">Please, type another username</string>
+    <string name="bad_email">Please, type another email</string>
+    <string name="bad_password">Please, type another password</string>
+    <string name="passwords_dont_match">Sorry, the passwords don\'t match</string>
+    <string name="op">#OP</string>
 </resources>

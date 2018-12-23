@@ -5,12 +5,12 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.MenuItem
 import android.view.View
-import android.widget.AdapterView
 import by.overpass.conferclient.R
+import by.overpass.conferclient.data.dto.Status
 import by.overpass.conferclient.ui.base.fragment.PostListFragment
 import by.overpass.conferclient.ui.list.fragment.popular.adapter.PopularPostAdapter
-import by.overpass.conferclient.util.getVm
 import by.overpass.conferclient.util.shortToast
+import by.overpass.conferclient.util.vm
 import by.overpass.conferclient.viewmodel.popular.PopularViewModel
 import kotlinx.android.synthetic.main.fragment_popular.*
 
@@ -19,7 +19,7 @@ private typealias VMFactory = PopularViewModel.Factory
 
 class PopularFragment : PostListFragment() {
 
-    private lateinit var viewModel: VM
+    private val viewModel: VM by vm(VMFactory::class.java)
     private lateinit var adapter: PopularPostAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -31,7 +31,6 @@ class PopularFragment : PostListFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = getVm(this, VM::class.java, VMFactory::class.java)
         onViewModelReady()
     }
 
@@ -40,11 +39,35 @@ class PopularFragment : PostListFragment() {
     override fun getActionBarTitleRes(): Int = R.string.popular
 
     override fun onViewModelReady() {
+        viewModel.getProgress().observe(this, Observer {
+            it?.run {
+                onStatusChanged(this)
+            }
+        })
         viewModel.getPopular().observe(this, Observer {
             it?.run {
                 adapter.posts = this
             }
         })
+    }
+
+    private fun onStatusChanged(status: Status) {
+        when (status) {
+            is Status.Error -> {
+                setLoading(false)
+                shortToast(status.message)
+            }
+            is Status.Success -> {
+                setLoading(false)
+            }
+            else -> {
+                setLoading(true)
+            }
+        }
+    }
+
+    private fun setLoading(loading: Boolean) {
+        pbLoading.visibility = if (loading) View.VISIBLE else View.GONE
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

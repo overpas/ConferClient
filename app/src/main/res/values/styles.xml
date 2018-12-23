@@ -72,10 +72,18 @@
         <item name="android:maxLines">5</item>
     </style>
 
-    <style name="PostTreePlainText" parent="PostAttribute">
+    <style name="PostTreePlainText">
         <item name="android:layout_marginStart">@dimen/margin_s</item>
         <item name="android:layout_marginEnd">@dimen/margin_s</item>
-        <item name="android:ellipsize">end</item>
+        <item name="android:ellipsize">none</item>
+    </style>
+
+    <style name="OpMark">
+        <item name="android:layout_marginStart">@dimen/margin_s</item>
+        <item name="android:text">@string/op</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textSize">@dimen/text_size_l</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
 </resources>

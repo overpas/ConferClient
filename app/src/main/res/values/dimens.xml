@@ -42,4 +42,5 @@
     <dimen name="width_dialog_et">280dp</dimen>
     <dimen name="size_dialog_icon">28dp</dimen>
     <dimen name="margin_dialog_progress_bar">50dp</dimen>
+    <dimen name="height_logo">60dp</dimen>
 </resources>

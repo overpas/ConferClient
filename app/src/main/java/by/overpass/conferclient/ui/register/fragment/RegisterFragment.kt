@@ -1,7 +1,6 @@
 package by.overpass.conferclient.ui.register.fragment
 
 import android.arch.lifecycle.Observer
-import android.net.sip.SipRegistrationListener
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.util.Patterns
@@ -9,23 +8,19 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import by.overpass.conferclient.R
 import by.overpass.conferclient.data.dto.RegistrationStatus
 import by.overpass.conferclient.data.dto.UserRegistration
-import by.overpass.conferclient.util.getVm
 import by.overpass.conferclient.util.shortToast
 import by.overpass.conferclient.util.text
+import by.overpass.conferclient.util.vm
 import by.overpass.conferclient.viewmodel.registration.RegistrationViewModel
 import kotlinx.android.synthetic.main.fragment_register.*
 import java.util.regex.Pattern
 
-private typealias VM = RegistrationViewModel
-private typealias VMFactory = RegistrationViewModel.Factory
-
 class RegisterFragment : Fragment() {
 
-    private lateinit var viewModel: RegistrationViewModel
+    private val viewModel: RegistrationViewModel by vm(RegistrationViewModel.Factory::class.java)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,7 +37,6 @@ class RegisterFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = getVm(this, VM::class.java, VMFactory::class.java)
         btnRegister.setOnClickListener {
             onRegisterClicked()
         }
@@ -63,20 +57,27 @@ class RegisterFragment : Fragment() {
 
     private fun onRegisterClicked() {
         if (!isUsernameValid()) {
+            etUsername.error = getString(R.string.bad_username)
+            etUsername.requestFocus()
             return
         }
         if (!isEmailValid()) {
+            etEmail.error = getString(R.string.bad_email)
+            etEmail.requestFocus()
             return
         }
         if (!isPasswordValid()) {
+            etPassword.error = getString(R.string.bad_password)
+            etPassword.requestFocus()
             return
         }
         if (!doPasswordsMatch()) {
+            etConfirmPassword.error = getString(R.string.passwords_dont_match)
+            etConfirmPassword.requestFocus()
             return
         }
         viewModel.register(gatherInfo()).observe(this, Observer {
             it?.run {
-                setLoading(false)
                 onRegistrationStatusReceived(this)
             }
         })
