@@ -53,7 +53,6 @@ class NewPostDialogFragment : DialogFragment() {
     }
 
     private fun onCancelClicked() {
-        shortToast(R.string.cancel)
         dismiss()
     }
 

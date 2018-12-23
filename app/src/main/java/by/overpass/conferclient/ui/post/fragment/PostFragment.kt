@@ -2,6 +2,7 @@ package by.overpass.conferclient.ui.post.fragment
 
 import android.arch.lifecycle.Observer
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.CardView
@@ -27,6 +28,8 @@ class PostFragment : Fragment() {
     private val random = Random()
     private val viewModel: PostViewModel by vm(PostViewModel.Factory::class.java)
     private var postOwner: PostOwner? = null
+
+    private lateinit var simplePostTreeBackground: Drawable
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
@@ -100,6 +103,7 @@ class PostFragment : Fragment() {
             postTreeView = LayoutInflater.from(context).run {
                 inflate(R.layout.item_first_post_tree, llPostTreeContainer, false)
             }
+            simplePostTreeBackground = postTreeView.background
             postTreeView.findViewById<TextView>(R.id.tvOp).setOnClickListener {
                 postOwner?.forwardNewPostAttempt()
             }
@@ -135,14 +139,16 @@ class PostFragment : Fragment() {
     }
 
     private fun highlightParent(parentPostView: CardView) {
-        val previousBackground = parentPostView.background
-        parentPostView.background = resources.getDrawable(
-            R.drawable.bg_post_highlighted,
-            ConferApp.getAppContext().theme
-        )
-        parentPostView.postDelayed({
-            parentPostView.background = previousBackground
-        }, HIGHLIGHT_PERIOD_MS)
+        parentPostView.post {
+            parentPostView.background = resources.getDrawable(
+                R.drawable.bg_post_highlighted,
+                ConferApp.getAppContext().theme
+            )
+            parentPostView.postDelayed({
+                parentPostView.background = simplePostTreeBackground
+            }, HIGHLIGHT_PERIOD_MS)
+        }
+
     }
 
     private fun setLoading(loading: Boolean) {

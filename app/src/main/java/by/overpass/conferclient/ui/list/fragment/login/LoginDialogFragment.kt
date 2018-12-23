@@ -59,7 +59,6 @@ class LoginDialogFragment : DialogFragment() {
     }
 
     private fun onCancelClicked() {
-        shortToast(R.string.cancel)
         dismiss()
     }
 

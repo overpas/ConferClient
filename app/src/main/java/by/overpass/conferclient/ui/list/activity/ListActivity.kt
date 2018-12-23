@@ -10,8 +10,9 @@ import android.widget.Button
 import android.widget.TextView
 import by.overpass.conferclient.R
 import by.overpass.conferclient.ui.base.activity.BaseAuthActivity
-import by.overpass.conferclient.ui.list.fragment.create.NewPostDialogFragment
+import by.overpass.conferclient.ui.list.fragment.about.AboutDialogFragment
 import by.overpass.conferclient.ui.list.fragment.latest.LatestFragment
+import by.overpass.conferclient.ui.list.fragment.logout.LogoutDialogFragment
 import by.overpass.conferclient.ui.list.fragment.popular.PopularFragment
 import by.overpass.conferclient.util.Preferences
 import by.overpass.conferclient.util.replaceFragment
@@ -92,14 +93,24 @@ class ListActivity : BaseAuthActivity(), NavigationView.OnNavigationItemSelected
                 replaceFragment(PopularFragment.newInstance(), R.id.flListFragmentContainer, false)
             }
             R.id.action_about -> {
-
+                showAboutDialog()
             }
             R.id.action_logout -> {
-                Preferences.deleteToken()
+                showLogoutDialog()
             }
         }
         drawerLayoutMain.closeDrawer(GravityCompat.START)
         return true
+    }
+
+    private fun showAboutDialog() {
+        AboutDialogFragment.newInstance()
+            .show(supportFragmentManager, AboutDialogFragment.TAG)
+    }
+
+    private fun showLogoutDialog() {
+        LogoutDialogFragment.newInstance()
+            .show(supportFragmentManager, LogoutDialogFragment.TAG)
     }
 
 }

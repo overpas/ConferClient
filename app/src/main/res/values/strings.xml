@@ -35,4 +35,9 @@
     <string name="bad_password">Please, type another password</string>
     <string name="passwords_dont_match">Sorry, the passwords don\'t match</string>
     <string name="op">#OP</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="want_to_logout">Are you sure you want to log out?</string>
+    <string name="made_by">Made by Pavel Shurmilov</string>
+    <string name="already_logged_out">You are already logged out</string>
 </resources>
