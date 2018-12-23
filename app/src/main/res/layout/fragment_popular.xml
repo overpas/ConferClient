@@ -1,23 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:id="@+id/srlRefresh"
     tools:context=".ui.list.fragment.latest.LatestFragment">
 
-    <ProgressBar
-        android:id="@+id/pbLoading"
-        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-        android:layout_width="match_parent"
-        android:visibility="gone"
-        android:layout_height="wrap_content"
-        android:indeterminate="true" />
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rvPosts"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:listitem="@layout/adapter_item_post" />
+        android:orientation="vertical">
 
-</LinearLayout>
+        <ProgressBar
+            android:id="@+id/pbLoading"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:visibility="gone"
+            android:layout_height="wrap_content"
+            android:indeterminate="true" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rvPosts"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:listitem="@layout/adapter_item_post" />
+
+    </LinearLayout>
+
+</android.support.v4.widget.SwipeRefreshLayout>

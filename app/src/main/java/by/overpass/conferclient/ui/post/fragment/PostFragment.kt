@@ -55,6 +55,20 @@ class PostFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupSwipeToRefresh()
+        fetchData()
+    }
+
+    private fun setupSwipeToRefresh() {
+        srlRefresh.setOnRefreshListener {
+            fetchData()
+            srlRefresh.postDelayed({
+                srlRefresh.isRefreshing = false
+            }, REFRESH_PERIOD_MS)
+        }
+    }
+
+    private fun fetchData() {
         val postId = arguments?.getLong(POST_ID_KEY, -1)
         if (postId != null && postId != -1L) {
             viewModel.getProgress().observe(this, Observer {
@@ -91,7 +105,6 @@ class PostFragment : Fragment() {
     }
 
     private fun onPostTreeReceived(postTree: PostTree) {
-        // TODO: Change first post appearance
         llPostTreeContainer.removeAllViews()
         postOwner?.setActionBarTitle(postTree.title)
         addPostTreeView(postTree, 0, llPostTreeContainer.id)
@@ -178,6 +191,7 @@ class PostFragment : Fragment() {
         private const val POST_ID_KEY = "POST_ID_KEY"
         private const val LEVEL_COEFFICIENT = 40
         private const val HIGHLIGHT_PERIOD_MS = 2000L
+        private const val REFRESH_PERIOD_MS = 2000L
 
         fun newInstance(postId: Long) = Bundle()
             .apply { putLong(POST_ID_KEY, postId) }

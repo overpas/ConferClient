@@ -14,12 +14,11 @@ import by.overpass.conferclient.util.vm
 import by.overpass.conferclient.viewmodel.popular.PopularViewModel
 import kotlinx.android.synthetic.main.fragment_popular.*
 
-private typealias VM = PopularViewModel
-private typealias VMFactory = PopularViewModel.Factory
+private const val REFRESH_PERIOD_MS = 2000L
 
 class PopularFragment : PostListFragment() {
 
-    private val viewModel: VM by vm(VMFactory::class.java)
+    private val viewModel: PopularViewModel by vm(PopularViewModel.Factory::class.java)
     private lateinit var adapter: PopularPostAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -31,14 +30,24 @@ class PopularFragment : PostListFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        onViewModelReady()
+        setupSwipeToRefresh()
+        fetchData()
     }
 
     override fun getLayoutRes(): Int = R.layout.fragment_popular
 
     override fun getActionBarTitleRes(): Int = R.string.popular
 
-    override fun onViewModelReady() {
+    private fun setupSwipeToRefresh() {
+        srlRefresh.setOnRefreshListener {
+            fetchData()
+            srlRefresh.postDelayed({
+                srlRefresh.isRefreshing = false
+            }, REFRESH_PERIOD_MS)
+        }
+    }
+
+    private fun fetchData() {
         viewModel.getProgress().observe(this, Observer {
             it?.run {
                 onStatusChanged(this)
