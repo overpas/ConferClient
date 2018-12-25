@@ -1,5 +1,6 @@
 package by.overpass.conferclient.ui.list.activity
 
+import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
@@ -16,6 +17,8 @@ import by.overpass.conferclient.ui.list.fragment.logout.LogoutDialogFragment
 import by.overpass.conferclient.ui.list.fragment.popular.PopularFragment
 import by.overpass.conferclient.util.Preferences
 import by.overpass.conferclient.util.replaceFragment
+import by.overpass.conferclient.util.vm
+import by.overpass.conferclient.viewmodel.list.ListViewModel
 import kotlinx.android.synthetic.main.activity_list.*
 import kotlinx.android.synthetic.main.app_bar_list.*
 
@@ -23,6 +26,8 @@ class ListActivity : BaseAuthActivity(), NavigationView.OnNavigationItemSelected
 
     private lateinit var tvUserName: TextView
     private lateinit var btnLogin: Button
+
+    private val viewModel: ListViewModel by vm(ListViewModel.Factory::class.java)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,8 +62,7 @@ class ListActivity : BaseAuthActivity(), NavigationView.OnNavigationItemSelected
         tvUserName = header.findViewById(R.id.tvUserName)
         btnLogin = header.findViewById(R.id.btnLogin)
         if (isLoggedIn()) {
-            tvUserName.text = getString(R.string.authorized)
-            btnLogin.visibility = View.GONE
+            fetchCurrentUser()
         }
         btnLogin.setOnClickListener {
             showLoginDialog(false)
@@ -66,9 +70,7 @@ class ListActivity : BaseAuthActivity(), NavigationView.OnNavigationItemSelected
         Preferences.addTokenListener(object : Preferences.OnTokenChangedListener {
             override fun onTokenChanged() {
                 if (isLoggedIn()) {
-                    // TODO: Display user name
-                    tvUserName.text = getString(R.string.authorized)
-                    btnLogin.visibility = View.GONE
+                    fetchCurrentUser()
                 } else {
                     tvUserName.text = getString(R.string.nav_header_name)
                     btnLogin.visibility = View.VISIBLE
@@ -112,6 +114,19 @@ class ListActivity : BaseAuthActivity(), NavigationView.OnNavigationItemSelected
     private fun showLogoutDialog() {
         LogoutDialogFragment.newInstance()
             .show(supportFragmentManager, LogoutDialogFragment.TAG)
+    }
+
+    private fun fetchCurrentUser() {
+        viewModel.getCurrentUser().observe(this, Observer {
+            it?.run {
+                tvUserName.text = fullName
+                btnLogin.visibility = View.GONE
+            } ?: run {
+                Preferences.deleteToken()
+                tvUserName.text = getString(R.string.nav_header_name)
+                btnLogin.visibility = View.VISIBLE
+            }
+        })
     }
 
 }

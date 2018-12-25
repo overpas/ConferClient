@@ -16,7 +16,11 @@ class PopularViewModel(context: Context) : ViewModel() {
 
     fun getPopularNoCache() = popularRepository.getPopularNoCache()
 
-    fun getPopular(text: String?): LiveData<List<PostWithUser>> = popularRepository.getPopular(text)
+    fun getPopular(text: String?): LiveData<List<PostWithUser>> = if (text == null) {
+        popularRepository.getPopular()
+    } else {
+        popularRepository.getPopularLocallyByText(text)
+    }
 
     fun getProgress(): LiveData<Status> = progress
 

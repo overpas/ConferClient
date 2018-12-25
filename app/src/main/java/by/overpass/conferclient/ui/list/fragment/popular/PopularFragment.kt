@@ -81,17 +81,6 @@ class PopularFragment : PostListFragment() {
         pbLoading.visibility = if (loading) View.VISIBLE else View.GONE
     }
 
-    /*override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.action_search -> {
-                fetchData()
-                shortToast("Popular")
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
-    }*/
-
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         val searchView = menu.findItem(R.id.action_search).actionView as SearchView
@@ -106,6 +95,10 @@ class PopularFragment : PostListFragment() {
             }
 
         })
+        searchView.setOnCloseListener {
+            fetchData()
+            false
+        }
     }
 
     companion object {

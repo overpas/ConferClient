@@ -5,6 +5,8 @@ import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
 import android.arch.persistence.room.Relation
 
+val GUEST = User(-1, "", "Guest", "")
+
 @Entity
 data class User(
     @PrimaryKey

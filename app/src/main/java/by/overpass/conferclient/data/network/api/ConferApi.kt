@@ -1,6 +1,8 @@
 package by.overpass.conferclient.data.network.api
 
+import by.overpass.conferclient.data.db.entity.User
 import by.overpass.conferclient.data.dto.UserRegistration
+import by.overpass.conferclient.data.network.dto.Author
 import by.overpass.conferclient.data.network.dto.Post
 import by.overpass.conferclient.data.network.dto.PostTree
 import by.overpass.conferclient.data.network.dto.TokenResponse
@@ -21,6 +23,9 @@ interface ConferApi {
 
     @GET("$API_POSTS/{id}")
     fun getPostById(@Path("id") id: Long): Call<PostTree>
+
+    @GET("$API/users/{id}")
+    fun getUserById(@Path("id") id: Long): Call<User>
 
     @POST("$API_POSTS/create/new")
     fun createNewPost(
