@@ -9,17 +9,22 @@ import android.view.View
 import android.view.ViewGroup
 import by.overpass.conferclient.R
 import by.overpass.conferclient.data.dto.PostCreationStatus
+import by.overpass.conferclient.ui.post.activity.PostActivity
 import by.overpass.conferclient.util.parentVm
 import by.overpass.conferclient.util.shortToast
 import by.overpass.conferclient.util.text
-import by.overpass.conferclient.viewmodel.list.ListViewModel
+import by.overpass.conferclient.viewmodel.post.PostingViewModel
 import kotlinx.android.synthetic.main.dialog_new_post.*
+import timber.log.Timber
 
 class NewPostDialogFragment : DialogFragment() {
 
     private var newPostDialogCreator: NewPostDialogCreator? = null
 
-    private val viewModel: ListViewModel by parentVm(ListViewModel.Factory::class.java)
+    private val postingViewModel: PostingViewModel by parentVm(
+        PostingViewModel.Factory::class.java)
+
+    private var postId: Long = 0
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
@@ -35,7 +40,11 @@ class NewPostDialogFragment : DialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.dialog_new_post, container, false)
+        return if (postId != 0L) {
+            inflater.inflate(R.layout.dialog_reply_to_post, container, false)
+        } else {
+            inflater.inflate(R.layout.dialog_new_post, container, false)
+        }
     }
 
     override fun onViewCreated(theView: View, savedInstanceState: Bundle?) {
@@ -58,8 +67,8 @@ class NewPostDialogFragment : DialogFragment() {
     }
 
     private fun onSendClicked() {
-        viewModel
-            .newPost(etTitle.text(), etBody.text(), 0)
+        postingViewModel
+            .newPost(etTitle.text(), etBody.text(), postId)
             .observe(this, Observer {
                 if (it != null) {
                     onPostCreationStatusChanged(it)
@@ -76,7 +85,14 @@ class NewPostDialogFragment : DialogFragment() {
             }
             is PostCreationStatus.Success -> {
                 setLoading(false)
-                shortToast("New Post Created with id = ${postCreationStatus.postId}")
+                Timber.d("New Post Created with id = ${postCreationStatus.postId}")
+                if (postId == 0L) {
+                    context?.run {
+                        PostActivity.startPostActivity(this, postCreationStatus.postId)
+                    }
+                } else {
+                    postingViewModel.update()
+                }
                 dismiss()
             }
             else -> {
@@ -97,13 +113,15 @@ class NewPostDialogFragment : DialogFragment() {
     }
 
     interface NewPostDialogCreator {
-        fun offerToCreateNewPost()
+        fun offerToCreateNewPost(postId: Long)
     }
 
     companion object {
         val TAG = NewPostDialogFragment::class.java.simpleName
 
-        fun newInstance() = NewPostDialogFragment()
+        fun newInstance(postId: Long) = NewPostDialogFragment().apply {
+            this.postId = postId
+        }
     }
 
 }

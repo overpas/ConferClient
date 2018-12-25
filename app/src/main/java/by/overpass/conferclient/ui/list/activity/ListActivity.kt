@@ -66,6 +66,7 @@ class ListActivity : BaseAuthActivity(), NavigationView.OnNavigationItemSelected
         Preferences.addTokenListener(object : Preferences.OnTokenChangedListener {
             override fun onTokenChanged() {
                 if (isLoggedIn()) {
+                    // TODO: Display user name
                     tvUserName.text = getString(R.string.authorized)
                     btnLogin.visibility = View.GONE
                 } else {

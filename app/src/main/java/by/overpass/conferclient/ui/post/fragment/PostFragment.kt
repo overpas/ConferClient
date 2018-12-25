@@ -16,9 +16,9 @@ import by.overpass.conferclient.R
 import by.overpass.conferclient.data.dto.Status
 import by.overpass.conferclient.data.network.dto.PostTree
 import by.overpass.conferclient.util.formatPostDate
+import by.overpass.conferclient.util.parentVm
 import by.overpass.conferclient.util.shortToast
-import by.overpass.conferclient.util.vm
-import by.overpass.conferclient.viewmodel.post.PostViewModel
+import by.overpass.conferclient.viewmodel.post.PostingViewModel
 import kotlinx.android.synthetic.main.fragment_post.*
 import kotlinx.android.synthetic.main.item_post_tree.view.*
 import java.util.*
@@ -26,10 +26,14 @@ import java.util.*
 class PostFragment : Fragment() {
 
     private val random = Random()
-    private val viewModel: PostViewModel by vm(PostViewModel.Factory::class.java)
     private var postOwner: PostOwner? = null
+    private var postId = 0L
 
     private lateinit var simplePostTreeBackground: Drawable
+
+    private val viewModel: PostingViewModel by parentVm(PostingViewModel.Factory::class.java)
+    private val postingViewModel: PostingViewModel by parentVm(
+        PostingViewModel.Factory::class.java)
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
@@ -56,6 +60,7 @@ class PostFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupSwipeToRefresh()
+        subscribeToUpdates()
         fetchData()
     }
 
@@ -68,9 +73,16 @@ class PostFragment : Fragment() {
         }
     }
 
+    private fun subscribeToUpdates() {
+        postingViewModel.updates.observe(this, Observer { updated ->
+            updated
+                ?.takeIf { it }
+                ?.run { fetchData() }
+        })
+    }
+
     private fun fetchData() {
-        val postId = arguments?.getLong(POST_ID_KEY, -1)
-        if (postId != null && postId != -1L) {
+        if (postId != 0L) {
             viewModel.getProgress().observe(this, Observer {
                 it?.run {
                     onStatusChanged(this)
@@ -118,7 +130,7 @@ class PostFragment : Fragment() {
             }
             simplePostTreeBackground = postTreeView.background
             postTreeView.findViewById<TextView>(R.id.tvOp).setOnClickListener {
-                postOwner?.forwardNewPostAttempt()
+                postOwner?.replyToPost(postTree.id)
             }
         } else {
             postTreeView = LayoutInflater.from(context).run {
@@ -131,7 +143,7 @@ class PostFragment : Fragment() {
                 svPostParent.scrollTo(0, parentPostView.top)
             }
             postTreeView.ivReply.setOnClickListener {
-                postOwner?.forwardNewPostAttempt()
+                postOwner?.replyToPost(postTree.id)
             }
         }
         postTreeView.tvBody.text = postTree.body
@@ -183,7 +195,7 @@ class PostFragment : Fragment() {
 
     interface PostOwner {
         fun setActionBarTitle(title: String)
-        fun forwardNewPostAttempt()
+        fun replyToPost(postId: Long)
     }
 
     companion object {
@@ -193,10 +205,9 @@ class PostFragment : Fragment() {
         private const val HIGHLIGHT_PERIOD_MS = 2000L
         private const val REFRESH_PERIOD_MS = 2000L
 
-        fun newInstance(postId: Long) = Bundle()
-            .apply { putLong(POST_ID_KEY, postId) }
-            .run {
-                PostFragment().also { it.arguments = this }
+        fun newInstance(postId: Long) =
+            PostFragment().apply {
+                this.postId = postId
             }
     }
 

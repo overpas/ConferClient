@@ -42,11 +42,6 @@ abstract class PostListFragment : Fragment() {
         }
     }
 
-    /**
-     * Should be used to set necessary observers
-     */
-    protected open fun onViewModelReady() {}
-
     @CallSuper
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_list, menu)

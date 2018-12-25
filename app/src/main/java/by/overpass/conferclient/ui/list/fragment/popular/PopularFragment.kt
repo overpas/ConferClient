@@ -3,7 +3,9 @@ package by.overpass.conferclient.ui.list.fragment.popular
 import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
-import android.view.MenuItem
+import android.support.v7.widget.SearchView
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.View
 import by.overpass.conferclient.R
 import by.overpass.conferclient.data.dto.Status
@@ -47,13 +49,13 @@ class PopularFragment : PostListFragment() {
         }
     }
 
-    private fun fetchData() {
+    private fun fetchData(text: String? = null) {
         viewModel.getProgress().observe(this, Observer {
             it?.run {
                 onStatusChanged(this)
             }
         })
-        viewModel.getPopular().observe(this, Observer {
+        viewModel.getPopular(text).observe(this, Observer {
             it?.run {
                 adapter.posts = this
             }
@@ -79,20 +81,36 @@ class PopularFragment : PostListFragment() {
         pbLoading.visibility = if (loading) View.VISIBLE else View.GONE
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    /*override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_search -> {
+                fetchData()
                 shortToast("Popular")
                 true
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }*/
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        val searchView = menu.findItem(R.id.action_search).actionView as SearchView
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(p0: String?): Boolean = true
+
+            override fun onQueryTextChange(text: String?): Boolean {
+                if (!text.isNullOrEmpty()) {
+                    fetchData(text)
+                }
+                return true
+            }
+
+        })
     }
 
     companion object {
         @JvmStatic
-        fun newInstance() =
-            PopularFragment()
+        fun newInstance() = PopularFragment()
     }
 
 }

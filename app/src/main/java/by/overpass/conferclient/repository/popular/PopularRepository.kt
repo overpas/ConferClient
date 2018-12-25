@@ -52,8 +52,8 @@ class PopularRepository(private val progress: MutableLiveData<Status>, context: 
     }
 
     fun getPopular(
-        limit: Int = DEFAULT_LIMIT,
-        retried: Boolean = false
+        text: String?,
+        limit: Int = DEFAULT_LIMIT
     ): LiveData<List<PostWithUser>> {
         progress.value = Status.Loading
         conferApi.getPopular(limit).enqueue(object : Callback<List<Post>> {
@@ -76,7 +76,11 @@ class PopularRepository(private val progress: MutableLiveData<Status>, context: 
             }
 
         })
-        return postDao.findMostPopularWithUser(limit.toLong())
+        return if (text == null) {
+            postDao.findMostPopularWithUser(limit.toLong())
+        } else {
+            postDao.findMostPopularWithUser(limit.toLong(), text)
+        }
     }
 
 }

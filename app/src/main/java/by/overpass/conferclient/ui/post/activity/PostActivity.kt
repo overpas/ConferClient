@@ -31,8 +31,8 @@ class PostActivity : BaseAuthActivity(), PostFragment.PostOwner {
         supportActionBar?.title = title
     }
 
-    override fun forwardNewPostAttempt() {
-        attemptNewPost()
+    override fun replyToPost(postId: Long) {
+        attemptNewPost(postId)
     }
 
     companion object {

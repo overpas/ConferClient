@@ -41,6 +41,16 @@ interface PostDao {
     )
     fun findMostPopularWithUser(limit: Long): LiveData<List<PostWithUser>>
 
+    @Query(
+        """SELECT post1.*, User.* FROM Post as post1
+            LEFT JOIN User ON post1.userId = User.user_id
+            WHERE post1.title LIKE :text OR post1.body LIKE :text
+            OR User.fullName LIKE :text OR User.username LIKE :text
+            ORDER BY (SELECT COUNT(*) FROM Post as post2 WHERE post2.inReplyTo = post1.post_id)
+            DESC LIMIT :limit"""
+    )
+    fun findMostPopularWithUser(limit: Long, text: String): LiveData<List<PostWithUser>>
+
     @Query("DELETE FROM Post")
     fun deleteAll()
 

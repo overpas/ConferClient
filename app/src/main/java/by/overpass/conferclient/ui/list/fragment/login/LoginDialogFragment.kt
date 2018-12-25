@@ -14,14 +14,17 @@ import by.overpass.conferclient.ui.register.activity.RegisterActivity
 import by.overpass.conferclient.util.parentVm
 import by.overpass.conferclient.util.shortToast
 import by.overpass.conferclient.util.text
-import by.overpass.conferclient.viewmodel.list.ListViewModel
+import by.overpass.conferclient.viewmodel.post.PostingViewModel
 import kotlinx.android.synthetic.main.dialog_login.*
 
 class LoginDialogFragment : DialogFragment() {
 
     private var onLoggedInListener: OnLoggedInListener? = null
 
-    private val viewModel: ListViewModel by parentVm(ListViewModel.Factory::class.java)
+    private val viewModel: PostingViewModel by parentVm(PostingViewModel.Factory::class.java)
+
+    private var shouldCreateNewPost = false
+    private var postId = 0L
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
@@ -97,9 +100,7 @@ class LoginDialogFragment : DialogFragment() {
             }
             is AuthStatus.LoggedIn -> {
                 setLoading(false)
-                val shouldOfferToCreateNewPost =
-                    arguments?.getBoolean(SHOULD_CREATE_NEW_POST_KEY, false) ?: false
-                onLoggedInListener?.onLoggedIn(shouldOfferToCreateNewPost)
+                onLoggedInListener?.onLoggedIn(shouldCreateNewPost, postId)
                 dismiss()
             }
             else -> {
@@ -109,20 +110,17 @@ class LoginDialogFragment : DialogFragment() {
     }
 
     interface OnLoggedInListener {
-        fun onLoggedIn(shouldOfferToCreateNewPost: Boolean)
+        fun onLoggedIn(shouldOfferToCreateNewPost: Boolean, postId: Long = 0)
     }
 
     companion object {
-
         val TAG = LoginDialogFragment::class.java.simpleName
-        private const val SHOULD_CREATE_NEW_POST_KEY = "SHOULD_CREATE_NEW_POST_KEY"
 
-        fun newInstance(shouldCreateNewPost: Boolean): LoginDialogFragment {
-            return Bundle()
-                .apply { putBoolean(SHOULD_CREATE_NEW_POST_KEY, shouldCreateNewPost) }
-                .run {
-                    LoginDialogFragment().also { it.arguments = this }
-                }
+        fun newInstance(shouldCreateNewPost: Boolean, postId: Long): LoginDialogFragment {
+            return LoginDialogFragment().apply {
+                this.shouldCreateNewPost = shouldCreateNewPost
+                this.postId = postId
+            }
         }
 
     }
