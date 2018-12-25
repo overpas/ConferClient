@@ -4,6 +4,7 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Transformations
 import android.content.Context
+import by.overpass.conferclient.R
 import by.overpass.conferclient.data.db.ConferDatabase
 import by.overpass.conferclient.data.dto.Status
 import by.overpass.conferclient.data.mapper.PostTreeMapper
@@ -19,6 +20,7 @@ import timber.log.Timber
 class PostRepository(private val progress: MutableLiveData<Status>, context: Context) {
 
     private val conferApi = CLIENT.create(ConferApi::class.java)
+    private val defaultErrorMessage = context.getString(R.string.default_error_message)
     private val postTreeDao = ConferDatabase.getInstance(context).getPostTreeDao()
     private val mapper = PostTreeMapper()
 
@@ -27,7 +29,7 @@ class PostRepository(private val progress: MutableLiveData<Status>, context: Con
         conferApi.getPostById(id).enqueue(object : Callback<PostTree> {
             override fun onFailure(call: Call<PostTree>, t: Throwable) {
                 Timber.e(t)
-                progress.value = Status.Error(t.message ?: "Something went wrong")
+                progress.value = Status.Error(t.message ?: defaultErrorMessage)
             }
 
             override fun onResponse(call: Call<PostTree>, response: Response<PostTree>) {

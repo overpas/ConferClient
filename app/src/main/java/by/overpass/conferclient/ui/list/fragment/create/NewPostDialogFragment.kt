@@ -11,6 +11,7 @@ import by.overpass.conferclient.R
 import by.overpass.conferclient.data.dto.PostCreationStatus
 import by.overpass.conferclient.util.parentVm
 import by.overpass.conferclient.util.shortToast
+import by.overpass.conferclient.util.text
 import by.overpass.conferclient.viewmodel.list.ListViewModel
 import kotlinx.android.synthetic.main.dialog_new_post.*
 
@@ -57,17 +58,18 @@ class NewPostDialogFragment : DialogFragment() {
     }
 
     private fun onSendClicked() {
-        viewModel.newPost().observe(this, Observer {
-            if (it != null) {
-                onPostCreationStatusChanged(it)
-            }
-        })
+        viewModel
+            .newPost(etTitle.text(), etBody.text(), 0)
+            .observe(this, Observer {
+                if (it != null) {
+                    onPostCreationStatusChanged(it)
+                }
+            })
     }
 
     private fun onPostCreationStatusChanged(postCreationStatus: PostCreationStatus) {
         when (postCreationStatus) {
             is PostCreationStatus.Error -> {
-                // TODO: Error
                 setLoading(false)
                 shortToast(postCreationStatus.message)
                 dismiss()

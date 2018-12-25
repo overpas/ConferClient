@@ -41,10 +41,10 @@ class ListRepository(context: Context) {
                     response: Response<TokenResponse>
                 ) {
                     if (response.isSuccessful && response.body() != null) {
-                        val accessToken = response.body()!!.accessToken
-                        authStatusData.value = AuthStatus.LoggedIn(accessToken)
+                        val tokenResponse = response.body()!!
+                        authStatusData.value = AuthStatus.LoggedIn(tokenResponse.accessToken)
                         runInBackground {
-                            Preferences.saveToken(accessToken)
+                            Preferences.saveToken(tokenResponse)
                         }
                     } else {
                         authStatusData.value = AuthStatus.Error(response.message())

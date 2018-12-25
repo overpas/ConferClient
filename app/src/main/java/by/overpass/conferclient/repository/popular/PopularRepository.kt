@@ -3,6 +3,7 @@ package by.overpass.conferclient.repository.popular
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.content.Context
+import by.overpass.conferclient.R
 import by.overpass.conferclient.data.db.ConferDatabase
 import by.overpass.conferclient.data.dto.PostWithUser
 import by.overpass.conferclient.data.dto.Status
@@ -22,6 +23,7 @@ private const val DEFAULT_LIMIT = 10
 class PopularRepository(private val progress: MutableLiveData<Status>, context: Context) {
 
     private val conferApi = CLIENT.create(ConferApi::class.java)
+    private val defaultErrorMessage = context.getString(R.string.default_error_message)
     private val mapper = Mapper()
     private val postDao = ConferDatabase.getInstance(context).getPostDao()
     private val userDao = ConferDatabase.getInstance(context).getUserDao()
@@ -57,7 +59,7 @@ class PopularRepository(private val progress: MutableLiveData<Status>, context: 
         conferApi.getPopular(limit).enqueue(object : Callback<List<Post>> {
             override fun onFailure(call: Call<List<Post>>, t: Throwable) {
                 Timber.e(t)
-                progress.value = Status.Error(t.message ?: "Something went wrong")
+                progress.value = Status.Error(t.message ?: defaultErrorMessage)
             }
 
             override fun onResponse(call: Call<List<Post>>, response: Response<List<Post>>) {

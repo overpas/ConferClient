@@ -22,9 +22,14 @@ interface ConferApi {
     @GET("$API_POSTS/{id}")
     fun getPostById(@Path("id") id: Long): Call<PostTree>
 
-    // TODO Implement
-    @POST
-    fun createNewPost()
+    @POST("$API_POSTS/create/new")
+    fun createNewPost(
+        @Query("postTitle") title: String,
+        @Query("postBody") body: String,
+        @Query("userId") userId: Long,
+        @Query("inReplyTo") inReplyTo: Long,
+        @Query("access_token") accessToken: String
+    ): Call<PostTree>
 
     @POST("$API/auth/register")
     fun register(@Body userRegistration: UserRegistration): Call<Void>

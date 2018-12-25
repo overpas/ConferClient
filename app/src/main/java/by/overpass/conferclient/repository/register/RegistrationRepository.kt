@@ -3,6 +3,7 @@ package by.overpass.conferclient.repository.register
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.content.Context
+import by.overpass.conferclient.R
 import by.overpass.conferclient.data.dto.RegistrationStatus
 import by.overpass.conferclient.data.dto.UserRegistration
 import by.overpass.conferclient.data.network.CLIENT
@@ -15,6 +16,7 @@ import timber.log.Timber
 class RegistrationRepository(context: Context) {
 
     private val conferApi = CLIENT.create(ConferApi::class.java)
+    private val defaultErrorMessage = context.getString(R.string.default_error_message)
 
     fun register(userRegistration: UserRegistration): LiveData<RegistrationStatus> {
         val registerData = MutableLiveData<RegistrationStatus>()
@@ -22,7 +24,7 @@ class RegistrationRepository(context: Context) {
         conferApi.register(userRegistration).enqueue(object : Callback<Void> {
             override fun onFailure(call: Call<Void>, t: Throwable) {
                 Timber.d(t)
-                registerData.value = RegistrationStatus.Error(t.message ?: "Something went wrong")
+                registerData.value = RegistrationStatus.Error(t.message ?: defaultErrorMessage)
             }
 
             override fun onResponse(call: Call<Void>, response: Response<Void>) {

@@ -3,11 +3,15 @@ package by.overpass.conferclient.util
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
 import by.overpass.conferclient.ConferApp
+import by.overpass.conferclient.data.network.dto.TokenResponse
+import com.google.gson.Gson
 
 object Preferences {
 
     private const val DEFAULT_STRING = ""
     private const val AUTH_TOKEN_KEY = "AUTH_TOKEN_KEY"
+
+    private val gson = Gson()
 
     private val tokenChangedListeners = mutableListOf<OnTokenChangedListener>()
 
@@ -23,15 +27,19 @@ object Preferences {
         prefs.registerOnSharedPreferenceChangeListener(listener)
     }
 
-    fun saveToken(token: String) {
+    fun saveToken(tokenResponse: TokenResponse) {
+        val tokenResponseJson = gson.toJson(tokenResponse)
         prefs.edit()
-            .putString(AUTH_TOKEN_KEY, token)
+            .putString(AUTH_TOKEN_KEY, tokenResponseJson)
             .apply()
     }
 
-    fun getToken(): String? = prefs.getString(AUTH_TOKEN_KEY, DEFAULT_STRING)
+    fun getToken(): TokenResponse? {
+        val json = prefs.getString(AUTH_TOKEN_KEY, DEFAULT_STRING)
+        return gson.fromJson(json, TokenResponse::class.java)
+    }
 
-    fun tokenExists(): Boolean = !getToken().isNullOrEmpty()
+    fun tokenExists(): Boolean = getToken() != null
 
     fun deleteToken() {
         prefs.edit()

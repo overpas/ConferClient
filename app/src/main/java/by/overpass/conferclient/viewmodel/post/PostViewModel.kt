@@ -7,8 +7,9 @@ import android.content.Context
 import by.overpass.conferclient.data.dto.Status
 import by.overpass.conferclient.repository.post.PostRepository
 import by.overpass.conferclient.viewmodel.BaseFactory
+import by.overpass.conferclient.viewmodel.base.PostingViewModel
 
-class PostViewModel(context: Context) : ViewModel() {
+class PostViewModel(context: Context) : PostingViewModel(context) {
 
     private val progress = MutableLiveData<Status>()
     private val postRepository = PostRepository(progress, context)
