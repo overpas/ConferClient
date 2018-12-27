@@ -1,6 +1,7 @@
 package by.overpass.conferclient.data.db.dao
 
 import android.arch.lifecycle.LiveData
+import android.arch.paging.DataSource
 import android.arch.persistence.room.Dao
 import android.arch.persistence.room.Delete
 import android.arch.persistence.room.Insert
@@ -33,23 +34,23 @@ interface PostDao {
     @Query("SELECT COUNT(*) FROM Post WHERE inReplyTo = :id")
     fun findPopularityById(id: Long): Long
 
-    // Seems to work
-    @Query(
-        """SELECT post1.*, User.* FROM Post as post1 LEFT JOIN User ON post1.userId = User.user_id
+    @Query("""SELECT post1.*, User.* FROM Post as post1
+        LEFT JOIN User ON post1.userId = User.user_id
         ORDER BY (SELECT COUNT(*) FROM Post as post2 WHERE post2.inReplyTo = post1.post_id)
-        DESC LIMIT :limit"""
-    )
+        DESC LIMIT :limit""")
     fun findMostPopularWithUser(limit: Long): LiveData<List<PostWithUser>>
 
-    @Query(
-        """SELECT post1.*, User.* FROM Post as post1
+    @Query("""SELECT post1.*, User.* FROM Post as post1
             LEFT JOIN User ON post1.userId = User.user_id
             WHERE post1.title LIKE :text OR post1.body LIKE :text
             OR User.fullName LIKE :text OR User.username LIKE :text
             ORDER BY (SELECT COUNT(*) FROM Post as post2 WHERE post2.inReplyTo = post1.post_id)
-            DESC LIMIT :limit"""
-    )
+            DESC LIMIT :limit""")
     fun findMostPopularWithUser(limit: Long, text: String): LiveData<List<PostWithUser>>
+
+    @Query("""SELECT * FROM Post LEFT JOIN User ON Post.userId = User.user_id
+        GROUP BY Post.post_id ORDER BY date DESC""")
+    fun findLatestPaged(): DataSource.Factory<Int, PostWithUser>
 
     @Query("DELETE FROM Post")
     fun deleteAll()

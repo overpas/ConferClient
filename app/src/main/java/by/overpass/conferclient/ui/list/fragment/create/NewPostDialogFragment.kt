@@ -21,8 +21,7 @@ class NewPostDialogFragment : DialogFragment() {
 
     private var newPostDialogCreator: NewPostDialogCreator? = null
 
-    private val postingViewModel: PostingViewModel by parentVm(
-        PostingViewModel.Factory::class.java)
+    private val postingViewModel: PostingViewModel by parentVm(PostingViewModel.Factory::class.java)
 
     private var postId: Long = 0
 
@@ -88,7 +87,7 @@ class NewPostDialogFragment : DialogFragment() {
                 Timber.d("New Post Created with id = ${postCreationStatus.postId}")
                 if (postId == 0L) {
                     context?.run {
-                        PostActivity.startPostActivity(this, postCreationStatus.postId)
+                        PostActivity.start(this, postCreationStatus.postId)
                     }
                 } else {
                     postingViewModel.update()

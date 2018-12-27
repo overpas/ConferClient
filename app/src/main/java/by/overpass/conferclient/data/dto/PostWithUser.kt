@@ -1,7 +1,6 @@
 package by.overpass.conferclient.data.dto
 
 import android.arch.persistence.room.Embedded
-import android.arch.persistence.room.Ignore
 import by.overpass.conferclient.data.db.entity.Post
 import by.overpass.conferclient.data.db.entity.User
 

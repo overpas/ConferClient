@@ -1,4 +1,4 @@
-package by.overpass.conferclient.repository.popular
+package by.overpass.conferclient.data.repository.popular
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData

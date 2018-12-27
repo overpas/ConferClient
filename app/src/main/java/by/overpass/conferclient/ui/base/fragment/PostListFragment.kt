@@ -2,20 +2,51 @@ package by.overpass.conferclient.ui.base.fragment
 
 import android.os.Bundle
 import android.support.annotation.CallSuper
-import android.support.annotation.LayoutRes
 import android.support.annotation.StringRes
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.view.*
 import by.overpass.conferclient.R
+import by.overpass.conferclient.data.dto.Status
+import by.overpass.conferclient.util.shortToast
+import kotlinx.android.synthetic.main.fragment_list.*
+
+private const val REFRESH_PERIOD_MS = 2000L
 
 abstract class PostListFragment : Fragment() {
 
-    @LayoutRes
-    abstract fun getLayoutRes(): Int
-
     @StringRes
     abstract fun getActionBarTitleRes(): Int
+
+    abstract fun fetchData(text: String? = null)
+
+    protected open fun setupSwipeToRefresh() {
+        srlRefresh.setOnRefreshListener {
+            fetchData()
+            srlRefresh.postDelayed({
+                srlRefresh.isRefreshing = false
+            }, REFRESH_PERIOD_MS)
+        }
+    }
+
+    protected open fun onStatusChanged(status: Status) {
+        when (status) {
+            is Status.Error -> {
+                setLoading(false)
+                shortToast(status.message)
+            }
+            is Status.Success -> {
+                setLoading(false)
+            }
+            else -> {
+                setLoading(true)
+            }
+        }
+    }
+
+    protected open fun setLoading(loading: Boolean) {
+        pbLoading.visibility = if (loading) View.VISIBLE else View.GONE
+    }
 
     @CallSuper
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,9 +59,10 @@ abstract class PostListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(getLayoutRes(), container, false)
+        return inflater.inflate(R.layout.fragment_list, container, false)
     }
 
+    @CallSuper
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         activity?.run {
@@ -40,6 +72,7 @@ abstract class PostListFragment : Fragment() {
                 }
             }
         }
+        setupSwipeToRefresh()
     }
 
     @CallSuper

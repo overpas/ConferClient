@@ -1,4 +1,4 @@
-package by.overpass.conferclient.repository.list
+package by.overpass.conferclient.data.repository.list
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
@@ -81,4 +81,7 @@ class ListRepository(context: Context) {
 
 }
 
-private fun getBasicAuthHeader() = Credentials.basic(CLIENT_ID, CLIENT_SECRET)
+private fun getBasicAuthHeader() = Credentials.basic(
+    CLIENT_ID,
+    CLIENT_SECRET
+)

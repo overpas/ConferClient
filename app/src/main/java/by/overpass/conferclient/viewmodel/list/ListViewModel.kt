@@ -2,7 +2,7 @@ package by.overpass.conferclient.viewmodel.list
 
 import android.arch.lifecycle.ViewModel
 import android.content.Context
-import by.overpass.conferclient.repository.list.ListRepository
+import by.overpass.conferclient.data.repository.list.ListRepository
 import by.overpass.conferclient.viewmodel.BaseFactory
 
 class ListViewModel(context: Context) : ViewModel() {

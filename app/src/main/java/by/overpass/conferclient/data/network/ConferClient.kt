@@ -15,10 +15,8 @@ private val httpClient = OkHttpClient.Builder().apply {
     addInterceptor(httpLoggingInterceptor)
 }
 
-val CLIENT by lazy {
-    Retrofit.Builder()
-        .baseUrl(BASE_URL)
-        .addConverterFactory(GsonConverterFactory.create())
-        .client(httpClient.build())
-        .build()
-}
+val CLIENT = Retrofit.Builder()
+    .baseUrl(BASE_URL)
+    .addConverterFactory(GsonConverterFactory.create())
+    .client(httpClient.build())
+    .build()

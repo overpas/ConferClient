@@ -38,7 +38,7 @@ class PostActivity : BaseAuthActivity(), PostFragment.PostOwner {
     companion object {
         private const val POST_ID_KEY = "POST_ID_KEY"
 
-        fun startPostActivity(context: Context, postId: Long) {
+        fun start(context: Context, postId: Long) {
             val intent = Intent(context, PostActivity::class.java).apply {
                 putExtra(POST_ID_KEY, postId)
             }

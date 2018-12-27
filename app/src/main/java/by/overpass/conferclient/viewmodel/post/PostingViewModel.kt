@@ -7,9 +7,9 @@ import android.content.Context
 import by.overpass.conferclient.ConferApp
 import by.overpass.conferclient.data.dto.AuthStatus
 import by.overpass.conferclient.data.dto.Status
-import by.overpass.conferclient.repository.list.ListRepository
-import by.overpass.conferclient.repository.post.PostRepository
-import by.overpass.conferclient.repository.posting.PostingRepository
+import by.overpass.conferclient.data.repository.list.ListRepository
+import by.overpass.conferclient.data.repository.post.PostRepository
+import by.overpass.conferclient.data.repository.posting.PostingRepository
 import by.overpass.conferclient.viewmodel.BaseFactory
 
 open class PostingViewModel(context: Context = ConferApp.getAppContext()) : ViewModel() {
@@ -18,9 +18,12 @@ open class PostingViewModel(context: Context = ConferApp.getAppContext()) : View
 
     private val progress = MutableLiveData<Status>()
 
-    private val postingRepository = PostingRepository(context)
-    private val listRepository = ListRepository(context)
-    private val postRepository = PostRepository(progress, context)
+    private val postingRepository =
+        PostingRepository(context)
+    private val listRepository =
+        ListRepository(context)
+    private val postRepository =
+        PostRepository(progress, context)
 
     fun getPostTreeById(id: Long) = postRepository.getPostTreeById(id)
 
