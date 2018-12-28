@@ -50,25 +50,25 @@ class PopularFragment : PostListFragment() {
         })
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        val searchView = menu.findItem(R.id.action_search).actionView as SearchView
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(p0: String?): Boolean = true
-
-            override fun onQueryTextChange(text: String?): Boolean {
-                if (!text.isNullOrEmpty()) {
-                    fetchData(text)
-                }
-                return true
-            }
-
-        })
-        searchView.setOnCloseListener {
-            fetchData()
-            false
-        }
-    }
+//    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+//        super.onCreateOptionsMenu(menu, inflater)
+//        val searchView = menu.findItem(R.id.action_search).actionView as SearchView
+//        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+//            override fun onQueryTextSubmit(p0: String?): Boolean = true
+//
+//            override fun onQueryTextChange(text: String?): Boolean {
+//                if (!text.isNullOrEmpty()) {
+//                    fetchData(text)
+//                }
+//                return true
+//            }
+//
+//        })
+//        searchView.setOnCloseListener {
+//            fetchData()
+//            false
+//        }
+//    }
 
     companion object {
         @JvmStatic

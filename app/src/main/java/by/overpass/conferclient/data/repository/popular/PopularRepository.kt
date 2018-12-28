@@ -4,6 +4,7 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.content.Context
 import by.overpass.conferclient.R
+import by.overpass.conferclient.data.callback.PostListCallback
 import by.overpass.conferclient.data.db.ConferDatabase
 import by.overpass.conferclient.data.dto.PostWithUser
 import by.overpass.conferclient.data.dto.Status
@@ -11,7 +12,6 @@ import by.overpass.conferclient.data.mapper.Mapper
 import by.overpass.conferclient.data.network.CLIENT
 import by.overpass.conferclient.data.network.api.ConferApi
 import by.overpass.conferclient.data.network.dto.Post
-import by.overpass.conferclient.util.runInBackground
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -53,26 +53,7 @@ class PopularRepository(private val progress: MutableLiveData<Status>, context: 
 
     fun getPopular(limit: Int = DEFAULT_LIMIT): LiveData<List<PostWithUser>> {
         progress.value = Status.Loading
-        conferApi.getPopular(limit).enqueue(object : Callback<List<Post>> {
-            override fun onFailure(call: Call<List<Post>>, t: Throwable) {
-                Timber.e(t)
-                progress.value = Status.Error(t.message ?: defaultErrorMessage)
-            }
-
-            override fun onResponse(call: Call<List<Post>>, response: Response<List<Post>>) {
-                if (response.isSuccessful && response.body() != null) {
-                    val parsedPosts: List<Post> = response.body()!!
-                    val dbPosts = mapper.mapPosts(parsedPosts)
-                    val dbUsers = mapper.mapUsers(parsedPosts)
-                    runInBackground {
-                        userDao.insert(dbUsers)
-                        postDao.insert(dbPosts)
-                    }
-                    progress.value = Status.Success
-                }
-            }
-
-        })
+        conferApi.getPopular(limit).enqueue(PostListCallback(progress, mapper, postDao, userDao))
         return postDao.findMostPopularWithUser(limit.toLong())
     }
 

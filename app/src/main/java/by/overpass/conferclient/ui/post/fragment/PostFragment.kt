@@ -27,13 +27,11 @@ class PostFragment : Fragment() {
 
     private val random = Random()
     private var postOwner: PostOwner? = null
-    private var postId = 0L
 
     private lateinit var simplePostTreeBackground: Drawable
 
     private val viewModel: PostingViewModel by parentVm(PostingViewModel.Factory::class.java)
-    private val postingViewModel: PostingViewModel by parentVm(
-        PostingViewModel.Factory::class.java)
+    private val postingViewModel: PostingViewModel by parentVm(PostingViewModel.Factory::class.java)
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
@@ -82,6 +80,7 @@ class PostFragment : Fragment() {
     }
 
     private fun fetchData() {
+        val postId = arguments?.getLong(POST_ID_KEY) ?: 0L
         if (postId != 0L) {
             viewModel.getProgress().observe(this, Observer {
                 it?.run {
@@ -205,9 +204,12 @@ class PostFragment : Fragment() {
         private const val HIGHLIGHT_PERIOD_MS = 2000L
         private const val REFRESH_PERIOD_MS = 2000L
 
-        fun newInstance(postId: Long) =
-            PostFragment().apply {
-                this.postId = postId
+        fun newInstance(postId: Long) = Bundle()
+            .apply { putLong(POST_ID_KEY, postId) }
+            .let {
+                PostFragment().apply {
+                    arguments = it
+                }
             }
     }
 

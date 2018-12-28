@@ -5,6 +5,7 @@ import android.support.annotation.CallSuper
 import android.support.annotation.StringRes
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.SearchView
 import android.view.*
 import by.overpass.conferclient.R
 import by.overpass.conferclient.data.dto.Status
@@ -77,8 +78,25 @@ abstract class PostListFragment : Fragment() {
 
     @CallSuper
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_list, menu)
         super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.menu_list, menu)
+        val searchView = menu.findItem(R.id.action_search).actionView as SearchView
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(p0: String?): Boolean = true
+
+            override fun onQueryTextChange(text: String?): Boolean {
+                if (!text.isNullOrEmpty()) {
+                    fetchData(text)
+                }
+                return true
+            }
+
+        })
+        searchView.setOnCloseListener {
+            fetchData()
+            false
+        }
     }
+
 
 }

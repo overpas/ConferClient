@@ -7,12 +7,17 @@ import by.overpass.conferclient.viewmodel.BaseFactory
 
 class LatestViewModel(context: Context) : ViewModel() {
 
-    private val latestRepository =
-        LatestRepository(context)
+    private var latestRepository = LatestRepository(context)
 
-    fun getLatestPosts() = latestRepository.pagedPostData
+    fun getLatestPosts(text: String?) = if (text == null) {
+        latestRepository.pagedPostData
+    } else {
+        latestRepository.getPagedLocalPosts(text)
+    }
 
     fun getProgress() = latestRepository.progress
+
+    fun refresh() = latestRepository.boundaryCallback.loadPortion()
 
     class Factory(context: Context) : BaseFactory(context) {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {

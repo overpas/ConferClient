@@ -3,16 +3,12 @@ package by.overpass.conferclient.data.repository.posting
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.content.Context
+import by.overpass.conferclient.R
+import by.overpass.conferclient.data.callback.PostCreationCallback
 import by.overpass.conferclient.data.dto.PostCreationStatus
 import by.overpass.conferclient.data.network.CLIENT
 import by.overpass.conferclient.data.network.api.ConferApi
-import by.overpass.conferclient.data.network.dto.PostTree
 import by.overpass.conferclient.util.Preferences
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import timber.log.Timber
-import by.overpass.conferclient.R
 
 class PostingRepository(context: Context) {
 
@@ -38,21 +34,7 @@ class PostingRepository(context: Context) {
                     inReplyTo,
                     tokenResponse.accessToken
                 )
-                .enqueue(object : Callback<PostTree> {
-                    override fun onFailure(call: Call<PostTree>, t: Throwable) {
-                        Timber.e(t)
-                        postCreationStatus.value =
-                                PostCreationStatus.Error(t.message ?: defaultErrorMessage)
-                    }
-
-                    override fun onResponse(call: Call<PostTree>, response: Response<PostTree>) {
-                        if (response.isSuccessful && response.body() != null) {
-                            val createdPostId = response.body()!!.id
-                            postCreationStatus.value = PostCreationStatus.Success(createdPostId)
-                        }
-                    }
-
-                })
+                .enqueue(PostCreationCallback(postCreationStatus, defaultErrorMessage))
         } else {
             postCreationStatus.value = PostCreationStatus.Error(notAuthorizedMessage)
         }
