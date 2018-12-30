@@ -8,6 +8,7 @@ import by.overpass.conferclient.data.dto.PostWithUser
 import by.overpass.conferclient.ui.list.fragment.viewholder.PostViewHolder
 import by.overpass.conferclient.R
 import by.overpass.conferclient.ui.post.activity.PostActivity
+import kotlinx.android.synthetic.main.adapter_item_post.view.*
 
 private val postItemDiff = object : DiffUtil.ItemCallback<PostWithUser>() {
 
@@ -35,6 +36,9 @@ class LatestPostAdapter : PagedListAdapter<PostWithUser, PostViewHolder>(postIte
                     viewHolder.itemView.context,
                     getPostId()
                 )
+            }
+            viewHolder.itemView.ivSwitchFullShort.setOnClickListener {
+                viewHolder.switch()
             }
         }
     }

@@ -8,6 +8,7 @@ import by.overpass.conferclient.R
 import by.overpass.conferclient.data.dto.PostWithUser
 import by.overpass.conferclient.ui.list.fragment.viewholder.PostViewHolder
 import by.overpass.conferclient.ui.post.activity.PostActivity
+import kotlinx.android.synthetic.main.adapter_item_post.view.*
 
 
 class PopularPostAdapter : RecyclerView.Adapter<PostViewHolder>() {
@@ -31,6 +32,9 @@ class PopularPostAdapter : RecyclerView.Adapter<PostViewHolder>() {
         viewHolder.setPost(posts[position])
         viewHolder.itemView.setOnClickListener {
             PostActivity.start(viewHolder.itemView.context, posts[position].getPostId())
+        }
+        viewHolder.itemView.ivSwitchFullShort.setOnClickListener {
+            viewHolder.switch()
         }
     }
 

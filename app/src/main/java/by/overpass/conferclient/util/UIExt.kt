@@ -6,23 +6,28 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentTransaction
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.RecyclerView
+import android.view.View
 import android.widget.EditText
 import android.widget.Toast
 import by.overpass.conferclient.ConferApp
 
-fun AppCompatActivity.replaceFragment(fragment: Fragment, @IdRes resId: Int, addToBackStack: Boolean) {
+fun AppCompatActivity.replaceFragment(
+    fragment: Fragment, @IdRes resId: Int,
+    addToBackStack: Boolean
+) {
     supportFragmentManager.transact {
         replace(resId, fragment)
-                .takeIf { addToBackStack }
-                ?.addToBackStack(null)
+            .takeIf { addToBackStack }
+            ?.addToBackStack(null)
     }
 }
 
 fun Fragment.replaceFragment(fragment: Fragment, @IdRes resId: Int, addToBackStack: Boolean) {
     childFragmentManager.transact {
         replace(resId, fragment)
-                .takeIf { addToBackStack }
-                ?.addToBackStack(null)
+            .takeIf { addToBackStack }
+            ?.addToBackStack(null)
     }
 }
 
@@ -49,3 +54,6 @@ fun AppCompatActivity.shortToast(@StringRes stringRes: Int) {
 }
 
 fun EditText.text() = text.toString().trim()
+
+inline fun <reified T : View> RecyclerView.ViewHolder.bind(@IdRes resId: Int): Lazy<T> =
+    lazy { itemView.findViewById<T>(resId) }

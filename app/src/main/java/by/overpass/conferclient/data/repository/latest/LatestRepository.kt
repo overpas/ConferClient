@@ -14,7 +14,7 @@ import by.overpass.conferclient.data.mapper.Mapper
 import by.overpass.conferclient.data.network.CLIENT
 import by.overpass.conferclient.data.network.api.ConferApi
 
-private const val PAGE_SIZE = 6
+private const val PAGE_SIZE = 10
 
 class LatestRepository(context: Context) {
 
