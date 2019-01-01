@@ -25,8 +25,8 @@ class PopularRepository(private val progress: MutableLiveData<Status>, context: 
     private val conferApi = CLIENT.create(ConferApi::class.java)
     private val defaultErrorMessage = context.getString(R.string.default_error_message)
     private val mapper = Mapper()
-    private val postDao = ConferDatabase.getInstance(context).getPostDao()
-    private val userDao = ConferDatabase.getInstance(context).getUserDao()
+    private val postDao = ConferDatabase.getInstance(context.applicationContext).getPostDao()
+    private val userDao = ConferDatabase.getInstance(context.applicationContext).getUserDao()
 
     fun getPopular(limit: Int = DEFAULT_LIMIT): LiveData<List<PostWithUser>> {
         progress.value = Status.Loading

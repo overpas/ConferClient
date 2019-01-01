@@ -29,6 +29,17 @@ class ListActivity : BaseAuthActivity(), NavigationView.OnNavigationItemSelected
 
     private val viewModel: ListViewModel by vm(ListViewModel.Factory::class.java)
 
+    private val tokenChangedListener = object : Preferences.OnTokenChangedListener {
+        override fun onTokenChanged() {
+            if (isLoggedIn()) {
+                fetchCurrentUser()
+            } else {
+                tvUserName.text = getString(R.string.nav_header_name)
+                btnLogin.visibility = View.VISIBLE
+            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_list)
@@ -67,16 +78,17 @@ class ListActivity : BaseAuthActivity(), NavigationView.OnNavigationItemSelected
         btnLogin.setOnClickListener {
             showLoginDialog(false)
         }
-        Preferences.addTokenListener(object : Preferences.OnTokenChangedListener {
-            override fun onTokenChanged() {
-                if (isLoggedIn()) {
-                    fetchCurrentUser()
-                } else {
-                    tvUserName.text = getString(R.string.nav_header_name)
-                    btnLogin.visibility = View.VISIBLE
-                }
-            }
-        })
+
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Preferences.addTokenListener(tokenChangedListener)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Preferences.removeTokenListener(tokenChangedListener)
     }
 
     override fun onBackPressed() {

@@ -20,7 +20,7 @@ private const val CLIENT_SECRET = "confer-secret"
 class ListRepository(context: Context) {
 
     private val conferApi = CLIENT.create(ConferApi::class.java)
-    private val userDao = ConferDatabase.getInstance(context).getUserDao()
+    private val userDao = ConferDatabase.getInstance(context.applicationContext).getUserDao()
 
     fun login(username: String, password: String): LiveData<AuthStatus> {
         val authStatusData = MutableLiveData<AuthStatus>()

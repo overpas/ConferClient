@@ -17,7 +17,7 @@ class PostRepository(private val progress: MutableLiveData<Status>, context: Con
 
     private val conferApi = CLIENT.create(ConferApi::class.java)
     private val defaultErrorMessage = context.getString(R.string.default_error_message)
-    private val postTreeDao = ConferDatabase.getInstance(context).getPostTreeDao()
+    private val postTreeDao = ConferDatabase.getInstance(context.applicationContext).getPostTreeDao()
     private val mapper = PostTreeMapper()
 
     fun getPostTreeById(id: Long): LiveData<PostTree> {

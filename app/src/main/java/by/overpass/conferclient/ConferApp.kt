@@ -2,7 +2,6 @@ package by.overpass.conferclient
 
 import android.app.Application
 import android.content.Context
-import by.overpass.conferclient.util.Preferences
 import timber.log.Timber
 
 class ConferApp : Application() {
