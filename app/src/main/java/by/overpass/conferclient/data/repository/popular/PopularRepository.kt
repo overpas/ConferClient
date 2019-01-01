@@ -28,29 +28,6 @@ class PopularRepository(private val progress: MutableLiveData<Status>, context: 
     private val postDao = ConferDatabase.getInstance(context).getPostDao()
     private val userDao = ConferDatabase.getInstance(context).getUserDao()
 
-    fun getPopularNoCache(
-        limit: Int = DEFAULT_LIMIT,
-        retried: Boolean = false
-    ): LiveData<List<Post>> {
-        val popularPosts = MutableLiveData<List<Post>>()
-        conferApi.getPopular(limit).enqueue(object : Callback<List<Post>> {
-            override fun onFailure(call: Call<List<Post>>, t: Throwable) {
-                if (t is SocketTimeoutException && !retried) {
-                    getPopularNoCache(limit, true)
-                }
-                Timber.e(t)
-            }
-
-            override fun onResponse(call: Call<List<Post>>, response: Response<List<Post>>) {
-                if (response.isSuccessful && response.body() != null) {
-                    popularPosts.value = response.body()
-                }
-            }
-
-        })
-        return popularPosts
-    }
-
     fun getPopular(limit: Int = DEFAULT_LIMIT): LiveData<List<PostWithUser>> {
         progress.value = Status.Loading
         conferApi.getPopular(limit).enqueue(PostListCallback(progress, mapper, postDao, userDao))

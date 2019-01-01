@@ -31,7 +31,10 @@ class LoginDialogFragment : DialogFragment() {
         if (context is OnLoggedInListener) {
             onLoggedInListener = context
         } else {
-            throw ClassCastException("$context must implement ${OnLoggedInListener::class.java.simpleName}")
+            throw ClassCastException(
+                "$context must implement " +
+                        OnLoggedInListener::class.java.simpleName
+            )
         }
     }
 

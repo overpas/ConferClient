@@ -31,7 +31,6 @@ class PostFragment : Fragment() {
     private lateinit var simplePostTreeBackground: Drawable
 
     private val viewModel: PostingViewModel by parentVm(PostingViewModel.Factory::class.java)
-    private val postingViewModel: PostingViewModel by parentVm(PostingViewModel.Factory::class.java)
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
@@ -72,7 +71,7 @@ class PostFragment : Fragment() {
     }
 
     private fun subscribeToUpdates() {
-        postingViewModel.updates.observe(this, Observer { updated ->
+        viewModel.updates.observe(this, Observer { updated ->
             updated
                 ?.takeIf { it }
                 ?.run { fetchData() }

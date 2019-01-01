@@ -15,8 +15,6 @@ class PopularViewModel(context: Context) : ViewModel() {
     private val popularRepository =
         PopularRepository(progress, context)
 
-    fun getPopularNoCache() = popularRepository.getPopularNoCache()
-
     fun getPopular(text: String?): LiveData<List<PostWithUser>> = if (text == null) {
         popularRepository.getPopular()
     } else {

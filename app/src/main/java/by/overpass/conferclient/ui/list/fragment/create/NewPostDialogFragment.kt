@@ -21,7 +21,7 @@ class NewPostDialogFragment : DialogFragment() {
 
     private var newPostDialogCreator: NewPostDialogCreator? = null
 
-    private val postingViewModel: PostingViewModel by parentVm(PostingViewModel.Factory::class.java)
+    private val viewModel: PostingViewModel by parentVm(PostingViewModel.Factory::class.java)
 
     private var postId: Long = 0
 
@@ -30,7 +30,10 @@ class NewPostDialogFragment : DialogFragment() {
         if (context is NewPostDialogCreator) {
             newPostDialogCreator = context
         } else {
-            throw ClassCastException("$context must implement ${NewPostDialogCreator::class.java.simpleName}")
+            throw ClassCastException(
+                "$context must implement " +
+                        NewPostDialogCreator::class.java.simpleName
+            )
         }
     }
 
@@ -66,7 +69,7 @@ class NewPostDialogFragment : DialogFragment() {
     }
 
     private fun onSendClicked() {
-        postingViewModel
+        viewModel
             .newPost(etTitle.text(), etBody.text(), postId)
             .observe(this, Observer {
                 if (it != null) {
@@ -90,7 +93,7 @@ class NewPostDialogFragment : DialogFragment() {
                         PostActivity.start(this, postCreationStatus.postId)
                     }
                 } else {
-                    postingViewModel.update()
+                    viewModel.update()
                 }
                 dismiss()
             }

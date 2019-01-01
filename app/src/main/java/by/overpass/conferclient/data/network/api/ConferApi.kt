@@ -19,7 +19,10 @@ interface ConferApi {
     fun getPopular(@Query("limit") limit: Int): Call<List<Post>>
 
     @GET("$API_POSTS/latest")
-    fun getLatest(@Query("start") start: Int, @Query("size") size: Int): Call<List<Post>>
+    fun getLatest(
+        @Query("start") start: Int,
+        @Query("size") size: Int
+    ): Call<List<Post>>
 
     @GET("$API_POSTS/{id}")
     fun getPostById(@Path("id") id: Long): Call<PostTree>
