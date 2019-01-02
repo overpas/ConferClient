@@ -11,14 +11,13 @@ import retrofit2.Response
 import timber.log.Timber
 
 class LoginCallback(
-    private val authStatusData: MutableLiveData<AuthStatus>
+    private val authStatusData: MutableLiveData<AuthStatus>,
+    private val defaultErrorMessage: String
 ) : Callback<TokenResponse> {
 
     override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
         Timber.e(t)
-        t.message?.run {
-            authStatusData.value = AuthStatus.Error(this)
-        }
+        authStatusData.value = AuthStatus.Error(defaultErrorMessage)
     }
 
     override fun onResponse(
@@ -32,7 +31,7 @@ class LoginCallback(
                 Preferences.saveToken(tokenResponse)
             }
         } else {
-            authStatusData.value = AuthStatus.Error(response.message())
+            authStatusData.value = AuthStatus.Error(defaultErrorMessage)
         }
     }
 

@@ -69,6 +69,9 @@ class NewPostDialogFragment : DialogFragment() {
     }
 
     private fun onSendClicked() {
+        if (!isPostBodyValid()) {
+            return
+        }
         viewModel
             .newPost(etTitle.text(), etBody.text(), postId)
             .observe(this, Observer {
@@ -76,6 +79,15 @@ class NewPostDialogFragment : DialogFragment() {
                     onPostCreationStatusChanged(it)
                 }
             })
+    }
+
+    private fun isPostBodyValid(): Boolean {
+        if (etBody.text().isEmpty()) {
+            etBody.error = getString(R.string.empty_message_warning)
+            etBody.requestFocus()
+            return false
+        }
+        return true
     }
 
     private fun onPostCreationStatusChanged(postCreationStatus: PostCreationStatus) {

@@ -13,6 +13,7 @@ import by.overpass.conferclient.data.network.CLIENT
 import by.overpass.conferclient.data.network.api.ConferApi
 import by.overpass.conferclient.util.Preferences
 import okhttp3.Credentials
+import by.overpass.conferclient.R
 
 private const val CLIENT_ID = "confer-client"
 private const val CLIENT_SECRET = "confer-secret"
@@ -20,13 +21,14 @@ private const val CLIENT_SECRET = "confer-secret"
 class ListRepository(context: Context) {
 
     private val conferApi = CLIENT.create(ConferApi::class.java)
-    private val userDao = ConferDatabase.getInstance(context.applicationContext).getUserDao()
+    private val userDao = ConferDatabase.getInstance().getUserDao()
+    private val defaultErrorMessage = context.getString(R.string.default_error_message)
 
     fun login(username: String, password: String): LiveData<AuthStatus> {
         val authStatusData = MutableLiveData<AuthStatus>()
         authStatusData.value = AuthStatus.Loading
         conferApi.login(getBasicAuthHeader(), username, password)
-            .enqueue(LoginCallback(authStatusData))
+            .enqueue(LoginCallback(authStatusData, defaultErrorMessage))
         return authStatusData
     }
 

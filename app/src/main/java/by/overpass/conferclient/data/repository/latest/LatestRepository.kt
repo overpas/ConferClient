@@ -18,8 +18,8 @@ private const val PAGE_SIZE = 10
 
 class LatestRepository(context: Context) {
 
-    private val postDao = ConferDatabase.getInstance(context.applicationContext).getPostDao()
-    private val userDao = ConferDatabase.getInstance(context.applicationContext).getUserDao()
+    private val postDao = ConferDatabase.getInstance().getPostDao()
+    private val userDao = ConferDatabase.getInstance().getUserDao()
     private val conferApi = CLIENT.create(ConferApi::class.java)
 
     private val config: PagedList.Config by lazy {

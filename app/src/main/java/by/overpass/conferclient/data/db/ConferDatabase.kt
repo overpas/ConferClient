@@ -5,6 +5,7 @@ import android.arch.persistence.room.Room
 import android.arch.persistence.room.RoomDatabase
 import android.arch.persistence.room.TypeConverters
 import android.content.Context
+import by.overpass.conferclient.ConferApp
 import by.overpass.conferclient.data.db.dao.PostDao
 import by.overpass.conferclient.data.db.dao.PostTreeDao
 import by.overpass.conferclient.data.db.dao.UserDao
@@ -25,8 +26,13 @@ abstract class ConferDatabase : RoomDatabase() {
     companion object {
         private var instance: ConferDatabase? = null
 
-        fun getInstance(context: Context) = instance ?: synchronized(this) {
-            instance ?: Room.databaseBuilder(context, ConferDatabase::class.java, "confer.db")
+        fun getInstance() = instance ?: synchronized(this) {
+            instance ?: Room
+                .databaseBuilder(
+                    ConferApp.getAppContext(),
+                    ConferDatabase::class.java,
+                    "confer.db"
+                )
                 .fallbackToDestructiveMigration()
                 .build()
                 .also { instance = it }

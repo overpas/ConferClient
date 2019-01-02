@@ -43,4 +43,5 @@
     <string name="default_error_message">Something went wrong</string>
     <string name="not_authorized">You are not authorized</string>
     <string name="reply">Reply</string>
+    <string name="empty_message_warning">Please, type something</string>
 </resources>
