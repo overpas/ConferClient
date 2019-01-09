@@ -15,6 +15,7 @@ class ConferApp : Application() {
 
     companion object {
         private lateinit var instance: ConferApp
+
         fun getAppContext(): Context = instance.applicationContext
     }
 
