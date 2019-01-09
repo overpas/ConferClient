@@ -10,6 +10,7 @@ class ConferApp : Application() {
         super.onCreate()
         instance = this
         Timber.plant(Timber.DebugTree())
+        // testb
     }
 
     companion object {
